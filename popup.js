@@ -67,7 +67,7 @@ function newLine(e) {
     }
 
     if (e.keyCode === 8) {
-        chrome.runtime.sendMessage({ command: { message: 'delete', id: e.path[0].value } })
+        chrome.runtime.sendMessage({ command: { message: 'delete', id: e.path[0].id } })
     }
 
     if (e.keyCode === 38 && e.path[1].previousElementSibling) {
@@ -93,8 +93,9 @@ function startHighlight(e) {
         let bkrColor = e.path[1].querySelector('[name="bkgrColor"]').value;
         let color = e.path[1].querySelector('[name="color"]').value;
         let flags = e.path[1].querySelector('[class^="flag"]').className;
-        console.log(query, bkrColor, color, flags)
-        chrome.runtime.sendMessage({ command: { query: [query, bkrColor, color, flags] } })
+        let id = e.path[0].id;
+        console.log(query, bkrColor, color, flags, id)
+        chrome.runtime.sendMessage({ command: { query: [query, bkrColor, color, flags, id] } })
 
     }
 }

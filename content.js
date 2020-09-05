@@ -6,7 +6,7 @@ let color = '';
 let flags = '';
 let onlyWords = '';
 
-function highlightText_2(stringArr, bkrColor = 'yellow', color = '#000', flags = 'ig', onlyWords = true, root = document.body) {
+function highlightText_2(stringArr, bkrColor = 'yellow', color = '#000', flags = 'ig', onlyWords = true, root = document.body, id) {
     console.time(`query_${stringArr}`);
     observer.disconnect();
 
@@ -57,7 +57,7 @@ function highlightText_2(stringArr, bkrColor = 'yellow', color = '#000', flags =
                 span.textContent = array[0]; // fill the span with the matched word
                 span.style.cssText = `background-color: ${bkrColor[i]}; color: ${color[i]};border-radius: 3px; box-shadow: #c4c4c4 1px 1px 3px;`; // use background color
                 span.className = 'hltd_text';
-                span.id = stringArr[i];
+                span.id = id;
                 range.insertNode(span); // insert node where our current range is
             }
 
@@ -206,5 +206,5 @@ function initialize() {
 function initializeSingle(query){
     if (query[3] === 'flag-on') { query[3] = 'gi' } else { query[3] = 'g' };
 
-    highlightText_2([query[0]], [query[1]], [query[2]], [query[3]], [true], document.body)
+    highlightText_2([query[0]], [query[1]], [query[2]], [query[3]], [true], document.body, query[4])
 }
