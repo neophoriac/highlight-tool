@@ -1,0 +1,81 @@
+@font-face {
+    font-family: "Aventurina";
+    src: url('/fonts/Aventurina.ttf');
+}
+
+body {
+    background-color: #5171A5;
+    border-radius: 5px;
+}
+
+.item {
+    display: flex;
+    flex-flow: row;
+}
+
+.textarea {
+    resize: none;
+    outline: none;
+    border: none;
+}
+
+.color {
+    border: none;
+    width: 16px;
+    height: 20px;
+    padding: 0px;
+    background-color: #38517a;
+
+}
+
+.flag-off {
+    font-size: 11px;
+    padding: 0px 2px;
+    outline: none;
+    background-color: #38517a;
+    border: 1px dotted #3F3047;
+    color: white;
+    margin: 2px 5px 2px 5px;
+}
+
+.flag-on {
+    font-size: 11px;
+    padding: 0px 2px;
+    outline: none;
+    background-color: #38517a;
+    border: 1px dotted #3F3047;
+    margin: 2px 5px 2px 5px;
+    text-decoration: line-through;
+    color: white;
+}
+
+.tabs {
+    display: flex;
+    flex-flow: row;
+}
+
+.tab {
+    border: 1px solid black;
+    border-bottom: none;
+}
+
+#list {
+    padding: 5px;
+    border: 3px dotted #3F3047;
+}
+
+#title {
+    font-family: Aventurina;
+    font-size: 20px;
+    margin: 0px 0px 3px 0px;
+}
+
+#save {
+    background-color: #38517a;
+    outline: none;
+    border: 3px dotted #3F3047;
+    margin-top: 5px;
+    color: #FCD0A1;
+    font-weight: 900;
+    font-style: italic
+}
