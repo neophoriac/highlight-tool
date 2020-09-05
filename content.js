@@ -102,39 +102,39 @@ console.log(hlts)
     console.timeEnd('remove')
 }
 
-textarea.onkeydown = function (e) {
+// textarea.onkeydown = function (e) {
 
-    if (e.keyCode === 13) {
-        e.preventDefault();
-        textarea.value = textarea.value.trim();
-        if (textarea.value === '') {
-            removeHighlight()
-            return
-        }
+//     if (e.keyCode === 13) {
+//         e.preventDefault();
+//         textarea.value = textarea.value.trim();
+//         if (textarea.value === '') {
+//             removeHighlight()
+//             return
+//         }
 
-        queries = textarea.value.split(' ');
-        queries.sort(function (a, b) {
-            if (a.length > b.length) {
-                return -1
-            } else if (a.length < b.length) {
-                return 1
-            }
-            return 0
-        });
-        queries = [...new Set(queries)];
+//         queries = textarea.value.split(' ');
+//         queries.sort(function (a, b) {
+//             if (a.length > b.length) {
+//                 return -1
+//             } else if (a.length < b.length) {
+//                 return 1
+//             }
+//             return 0
+//         });
+//         queries = [...new Set(queries)];
 
-        let queriesArr = {};
+//         let queriesArr = {};
 
-        queries.forEach(function (query) {
-            let h = Math.floor(Math.random() * 360)
-            let color;
-            if (h < 272 && h > 233) { color = '#fff' } else { color = '#000' }
-            queriesArr[query] = new Query(query, `hsl(${h},100%,75%)`, color, 'gi', true, document.body);
-        })
-        console.log(queriesArr)
-    }
-    textarea.focus();
-}
+//         queries.forEach(function (query) {
+//             let h = Math.floor(Math.random() * 360)
+//             let color;
+//             if (h < 272 && h > 233) { color = '#fff' } else { color = '#000' }
+//             queriesArr[query] = new Query(query, `hsl(${h},100%,75%)`, color, 'gi', true, document.body);
+//         })
+//         console.log(queriesArr)
+//     }
+//     textarea.focus();
+// }
 
 
 window.onload = function () {
