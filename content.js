@@ -5,6 +5,7 @@ let bkrColor = '';
 let color = '';
 let flags = '';
 let onlyWords = '';
+let id = '';
 
 function highlightText_2(stringArr, bkrColor = 'yellow', color = '#000', flags = 'ig', onlyWords = true, root = document.body, id) {
     console.time(`query_${stringArr}`);
@@ -14,7 +15,7 @@ function highlightText_2(stringArr, bkrColor = 'yellow', color = '#000', flags =
 
     let range = document.createRange(); // create a new range
     let regex
-    
+
     let treeWalker = document.createTreeWalker(
         root, // the root element of the subelements we will is through
         NodeFilter.SHOW_TEXT, // grab all the text nodes
@@ -57,7 +58,7 @@ function highlightText_2(stringArr, bkrColor = 'yellow', color = '#000', flags =
                 span.textContent = array[0]; // fill the span with the matched word
                 span.style.cssText = `background-color: ${bkrColor[i]}; color: ${color[i]};border-radius: 3px; box-shadow: #c4c4c4 1px 1px 3px;`; // use background color
                 span.className = 'hltd_text';
-                span.id = id;
+                span.id = id[i];
                 range.insertNode(span); // insert node where our current range is
             }
 
@@ -75,7 +76,7 @@ const observer = new MutationObserver(function (mutations) {
 
     mutations.forEach(mutation => {
         mutation.addedNodes.forEach(addedNode => {
-            highlightText_2(pattern, bkrColor, color, flags, onlyWords, addedNode)
+            highlightText_2(pattern, bkrColor, color, flags, onlyWords, addedNode, id)
 
             //             addedNode.childNodes.forEach(childNode=>{
             //                 if(childNode.nodeName === '#text'){
@@ -91,15 +92,14 @@ function removeHighlight(selector) {
     observer.disconnect();
     console.time('remove')
     let hlts = selector
-console.log(hlts)
     hlts.forEach(function (hlt) {
-        hlt.nextSibling.before(hlt.textContent)
-        hlt.remove()
+        hlt.before(hlt.textContent)
+        hlt.remove();
     })
     document.normalize();
-    observer.observe(document.body, { childList: true, subtree: true })
+    observer.observe(document.body, { childList: true, subtree: true });
     queries = [];
-    console.timeEnd('remove')
+    console.timeEnd('remove');
 }
 
 // textarea.onkeydown = function (e) {
@@ -172,7 +172,7 @@ chrome.runtime.onMessage.addListener(
         if (request.command.id) {
             removeHighlight(document.querySelectorAll(`#${request.command.id}`))
         }
-        if(request.command.query){
+        if (request.command.query) {
             initializeSingle(request.command.query);
         }
     });
@@ -198,13 +198,15 @@ function initialize() {
         flags = list.getProperty('flags');
         onlyWords = list.getProperty('onlyWords');
         let root = list.getProperty('root');
+        id = list.getProperty('id');
 
-        highlightText_2(pattern, bkrColor, color, flags, onlyWords, document.body)
+        console.log(id)
+        highlightText_2(pattern, bkrColor, color, flags, onlyWords, document.body, id)
     })
 }
 
-function initializeSingle(query){
+function initializeSingle(query) {
     if (query[3] === 'flag-on') { query[3] = 'gi' } else { query[3] = 'g' };
 
-    highlightText_2([query[0]], [query[1]], [query[2]], [query[3]], [true], document.body, query[4])
+    highlightText_2([query[0]], [query[1]], [query[2]], [query[3]], [true], document.body, [query[4]])
 }

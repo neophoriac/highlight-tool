@@ -13,46 +13,36 @@ function newLine(e) {
     if (e.keyCode === 13) {
         e.preventDefault();
 
+        startHighlight(e)
+
         if (e.path[0].value !== '') {
             let caretPos = e.path[0].selectionStart;
             let transferText = e.path[0].value.substr(caretPos)
             e.path[0].value = e.path[0].value.substr(0, caretPos);
 
-            let div = document.createElement('div');
-            let input = document.createElement('input');
-            let text = document.createElement('textarea');
-            let button = document.createElement('button');
-            let span = document.createElement('span')
-            let clr = document.createElement('input')
-            let bkgrClr = document.createElement('input')
-
-            div.appendChild(input);
-            div.appendChild(text);
-            div.appendChild(button);
-            div.appendChild(span);
-            div.appendChild(bkgrClr);
-            div.appendChild(clr);
-
-            e.path[1].parentNode.insertBefore(div, e.path[1].nextSibling);
-
             let colorsArr = getColor();
 
-            setAttributes(div, { class: 'item', id: `div_item_${textarea.length + 1}` });
-            setAttributes(input, { type: 'checkbox', id: `chkbx${textarea.length + 1}` });
-            setAttributes(text, { name: 'textarea', id: `item_${textarea.length + 1}`, class: 'textarea', cols: 30, rows: 1 });
-            setAttributes(button, { class: 'flag-on', name: 'button' });
-            setAttributes(bkgrClr, { type: 'color', name: 'bkgrColor', class: 'color', value: colorsArr[0] });
-            setAttributes(clr, { type: 'color', name: 'color', class: 'color', value: colorsArr[1] });
+            let els = createElements(['div', { class: 'item', id: `div_item_${textarea.length + 1}` }],
+                ['input', { type: 'checkbox', id: `chkbx${textarea.length + 1}` }],
+                ['textarea', { name: 'textarea', id: `item_${textarea.length + 1}`, class: 'textarea', cols: 30, rows: 1 }],
+                ['button', { class: 'flag-on', name: 'button' }],
+                ['input', { type: 'color', name: 'bkgrColor', class: 'color', value: colorsArr[0] }],
+                ['input', { type: 'color', name: 'color', class: 'color', value: colorsArr[1] }],
+                'span');
+
+            appendChilds(els.div1, [els.input1, els.textarea1, els.button1, els.span1, els.input2, els.input3]);
+
+            e.path[1].parentNode.insertBefore(els.div1, e.path[1].nextSibling);
 
 
-            text.value = transferText;
-            button.textContent = "Cs";
-            span.textContent = "|";
+            els.textarea1.value = transferText;
+            els.button1.textContent = "Cs";
+            els.span1.textContent = "|";
 
-            text.onkeydown = newLine;
-            text.onkeyup = startHighlight;
-            button.onclick = toggleFlag;
-            text.focus();
+            els.textarea1.onkeydown = newLine;
+            // els.textarea1.onkeyup = startHighlight;
+            els.button1.onclick = toggleFlag;
+            els.textarea1.focus();
         }
     }
 
@@ -88,22 +78,19 @@ function newLine(e) {
 }
 
 function startHighlight(e) {
-    if (e.keyCode !== 40 && e.keyCode !== 38 && e.keyCode !== 8 && e.keyCode !== 13) {
-        let query = e.path[0].value;
-        let bkrColor = e.path[1].querySelector('[name="bkgrColor"]').value;
-        let color = e.path[1].querySelector('[name="color"]').value;
-        let flags = e.path[1].querySelector('[class^="flag"]').className;
-        let id = e.path[0].id;
-        console.log(query, bkrColor, color, flags, id)
-        chrome.runtime.sendMessage({ command: { query: [query, bkrColor, color, flags, id] } })
-
-    }
-}
+    let query = e.path[0].value;
+    let bkrColor = e.path[1].querySelector('[name="bkgrColor"]').value;
+    let color = e.path[1].querySelector('[name="color"]').value;
+    let flags = e.path[1].querySelector('[class^="flag"]').className;
+    let id = e.path[0].id;
+    console.log('dsf', query, bkrColor, color, flags, id);
+    chrome.runtime.sendMessage({ command: { query: [query, bkrColor, color, flags, id] } })
+};
 
 let flagButtons = document.getElementsByName('button');
 
 flagButtons.forEach(button => {
-    button.onclick = toggleFlag
+    button.onclick = toggleFlag;
 })
 
 function toggleFlag(e) {
@@ -123,7 +110,7 @@ function setAttributes(el, attributes) {
 
 function getColor() {
     let rgb = [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)]; // get random RGB colors
-    let hexColor = []; // will hold complete conversion of RGB to hex
+    let hexColor = []; // will hold complete conversions of RGB to hex
     for (j = 0; j < rgb.length; j++) { // for each of rgb values
         let arr = [];// will hold converted a single rgb color each iteration
         let num = rgb[j] / 16 // divide rgb color by 16 
