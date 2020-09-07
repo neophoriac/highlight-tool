@@ -13,7 +13,8 @@ function newLine(e) {
     if (e.keyCode === 13) {
         e.preventDefault();
 
-        startHighlight(e)
+        startHighlight(e);
+        store(e);
 
         if (e.path[0].value !== '') {
             let caretPos = e.path[0].selectionStart;
@@ -42,6 +43,8 @@ function newLine(e) {
             els.textarea1.onkeydown = newLine;
             // els.textarea1.onkeyup = startHighlight;
             els.button1.onclick = toggleFlag;
+            els.input2.onchange = colorPicked;
+            els.input3.onchange = colorPicked;
             els.textarea1.focus();
         }
     }
@@ -87,12 +90,6 @@ function startHighlight(e) {
     chrome.runtime.sendMessage({ command: { query: [query, bkrColor, color, flags, id] } })
 };
 
-let flagButtons = document.getElementsByName('button');
-
-flagButtons.forEach(button => {
-    button.onclick = toggleFlag;
-})
-
 function toggleFlag(e) {
     let elClass = e.path[0].className
     if (elClass === 'flag-off') {
@@ -137,4 +134,24 @@ function getColor() {
     Y >= 145 ? color = '#000000' : color = '#ffffff'; // if rgb is dark, color is white, else color is black
 
     return ['#' + hexColor.join(''), color, rgb, Y]; // return all info in an array
+};
+
+let flagButtons = document.getElementsByName('button');
+
+flagButtons.forEach(button => {
+    button.onclick = toggleFlag;
+})
+
+let colors = document.getElementsByClassName('color');
+
+for (i = 0; i < colors.length; i++) {
+    colors[i].onchange = colorPicked
+}
+
+function colorPicked(e) {
+    store(e);
+    let color = e.target.value;
+    let colorType = e.target.name;
+    let queryId = e.target.parentElement.querySelector('textarea').id;
+    chrome.runtime.sendMessage({ command: { changeColor: {colorType: colorType, queryId: queryId, color: color} } });
 };

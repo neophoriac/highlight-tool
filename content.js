@@ -61,7 +61,6 @@ function highlightText_2(stringArr, bkrColor = 'yellow', color = '#000', flags =
                 span.id = id[i];
                 range.insertNode(span); // insert node where our current range is
             }
-
         }
 
         currentNode = treeWalker.nextNode(); // correntNode value is now the next text node of the DOM
@@ -175,6 +174,9 @@ chrome.runtime.onMessage.addListener(
         if (request.command.query) {
             initializeSingle(request.command.query);
         }
+        if (request.command.changeColor) {
+            changeColor(request.command.changeColor);
+        }
     });
 
 function initialize() {
@@ -209,4 +211,17 @@ function initializeSingle(query) {
     if (query[3] === 'flag-on') { query[3] = 'gi' } else { query[3] = 'g' };
 
     highlightText_2([query[0]], [query[1]], [query[2]], [query[3]], [true], document.body, [query[4]])
+}
+
+function changeColor(info) {
+    let color = info.color;
+    let colorType = info.colorType;
+    let queryId = info.queryId;
+    let instances = document.querySelectorAll(`#${queryId}`)
+    console.log(instances)
+    if (colorType === 'bkgrColor') {
+        instances.forEach(instance => { instance.style.backgroundColor = info.color })
+    } else {
+        instances.forEach(instance => { instance.style.color = info.color })
+    }
 }

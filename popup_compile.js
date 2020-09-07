@@ -13,7 +13,8 @@ class QueryLine {
 
 let queriesArr = {};
 let queries = {};
-save.onclick = e => {
+
+function store(e) {
     let items = document.querySelectorAll('.item');
 
     let patternArr = [];

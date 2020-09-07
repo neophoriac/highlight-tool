@@ -36,6 +36,9 @@ chrome.storage.local.get(['queryItems'], function (result) {
             createdEls.textarea1.onkeydown = newLine;
             // createdEls.textarea1.onkeyup = startHighlight;
             createdEls.button1.onclick = toggleFlag;
+            createdEls.input2.onchange = colorPicked;
+            createdEls.input3.onchange = colorPicked;
+
             queryLine.push(createdEls.div1)
         }
     }
