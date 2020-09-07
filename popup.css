@@ -70,7 +70,7 @@ body {
     margin: 0px 0px 3px 0px;
 }
 
-#save {
+#clear {
     background-color: #38517a;
     outline: none;
     border: 3px dotted #3F3047;
@@ -78,4 +78,18 @@ body {
     color: #FCD0A1;
     font-weight: 900;
     font-style: italic
+}
+
+#saving-svg {
+    width: 32px;
+    margin-top: -8px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+}
+
+#saving {
+    visibility: hidden;
 }

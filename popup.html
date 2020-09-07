@@ -9,7 +9,12 @@
 </head>
 
 <body>
-    <h3 id="title" style="color: #FCD0A1">Highlight Tool</h3>
+    <div class="header">
+        <h3 id="title" style="color: #FCD0A1">Highlight Tool</h3>
+        <div style = "display: flex" id = "saving">
+            <span style = "color: white; margin-right: 4px">Saving..</span>
+            <img id="saving-svg" src="images/Pulse-1.3s-200px.svg" alt="saving">
+        </div>
     </div>
     <div class="container">
         <div id="list">
@@ -22,7 +27,7 @@
                 <input type="color" name="color" class="color" value="#000000">
             </div>
         </div>
-        <button id="save">Go!</button>
+        <button id="clear">Clear</button>
     </div>
     <script src="popup.js"></script>
     <script src="popup_compile.js"></script>

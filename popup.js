@@ -155,3 +155,7 @@ function colorPicked(e) {
     let queryId = e.target.parentElement.querySelector('textarea').id;
     chrome.runtime.sendMessage({ command: { changeColor: {colorType: colorType, queryId: queryId, color: color} } });
 };
+
+$('#clear').onclick = (e)=>{
+
+}
