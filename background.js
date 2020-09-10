@@ -20,4 +20,10 @@ chrome.runtime.onMessage.addListener(
                 chrome.tabs.sendMessage(tabs[0].id, { command: request.command });
             });
         }
+        if(request.command === "getLocation"){
+            chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+                sendResponse({host: (new URL(tabs[0].url)).host})
+            });
+        }
+        return true;
     })

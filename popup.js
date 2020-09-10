@@ -166,6 +166,7 @@ document.getElementById('clear').onclick = (e) => {
     store(e);
 }
 
+
 document.getElementById('this-domain').onclick = (e) => {
     let globalList = document.getElementById('list');
     let domainList = document.getElementById('domain');
@@ -173,12 +174,13 @@ document.getElementById('this-domain').onclick = (e) => {
     if(globalList.style.display === "none"){
         domainList.style.display = "none";
         globalList.style.display = ""
-        globalList.firstElementChild.className = "item";
-        domainList.firstElementChild.className = "item-hidden";
     }else{
         globalList.style.display = "none"
         domainList.style.display = "";
-        globalList.firstElementChild.className = "item-hidden";
-        domainList.firstElementChild.className = "item";
     }
 }
+
+let domainList = document.getElementById('domain')
+chrome.runtime.sendMessage({ command: "getLocation"}, function (response){
+    domainList.className = response.host;
+});
