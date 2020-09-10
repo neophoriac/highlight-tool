@@ -64,20 +64,26 @@ body {
     border: 3px dotted #3F3047;
 }
 
+#domain {
+    padding: 5px;
+    border: 3px dotted #3F3047;
+}
+
 #title {
     font-family: Aventurina;
     font-size: 20px;
     margin: 0px 0px 3px 0px;
 }
 
-#clear {
+.button-below {
     background-color: #38517a;
     outline: none;
-    border: 3px dotted #3F3047;
+    border: none;
+    border-radius: 5px;
     margin-top: 5px;
-    color: #FCD0A1;
-    font-weight: 900;
-    font-style: italic
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
 }
 
 #saving-svg {
@@ -92,4 +98,15 @@ body {
 
 #saving {
     visibility: hidden;
+}
+
+.settings {
+    width: 22px;
+    float: right;
+    cursor: pointer;
+    margin-top: 3px;
+}
+
+#this-domain{
+    margin-left: 20%;
 }

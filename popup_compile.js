@@ -15,6 +15,9 @@ let queriesArr = {};
 let queries = {};
 
 function store(e) {
+
+    let indication = document.getElementById('saving')
+    indication.style.visibility = "visible";
     let items = document.querySelectorAll('.item');
 
     let patternArr = [];
@@ -42,7 +45,8 @@ function store(e) {
     queriesArr['queryInfo'] = [patternArr, flagArr, bkrColorArr, colorArr, idArr];
     queriesArr['queries'] = queries;
     chrome.storage.local.set({ queryItems: queriesArr }, function () {
-        chrome.runtime.sendMessage({ command: 'initialize' })
+        indication.style.visibility = "hidden";
+        // chrome.runtime.sendMessage({ command: 'initialize' })
     });
 
     chrome.storage.local.get(['queryItems'], function (result) {

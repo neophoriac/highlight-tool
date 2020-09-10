@@ -33,33 +33,35 @@ function highlightText_2(stringArr, bkrColor = 'yellow', color = '#000', flags =
     while (currentNode) { // while cirrentNode exists
 
         for (i = 0; i < stringArr.length; i++) {
-            if (stringArr[i].match(/\//g) && stringArr[i].match(/\//g).length === 2) {
-                let arr = stringArr[i].split('/');
-                stringArr[i] = arr[1];
-                if (arr[2]) {
-                    flags[i] = arr[2];
+            if (stringArr[i] !== '') {
+                if (stringArr[i].match(/\//g) && stringArr[i].match(/\//g).length === 2) {
+                    let arr = stringArr[i].split('/');
+                    stringArr[i] = arr[1];
+                    if (arr[2]) {
+                        flags[i] = arr[2];
+                    }
                 }
-            }
 
-            if (onlyWords[i]) {
-                regex = new RegExp(`\\b${stringArr[i]}\\b`, flags[i]); // create a regular expression from the string provided by user
-            } else {
-                regex = new RegExp(stringArr[i], flags[i]); // create a regular expression from the string provided by user
-            }
+                if (onlyWords[i]) {
+                    regex = new RegExp(`\\b${stringArr[i]}\\b`, flags[i]); // create a regular expression from the string provided by user
+                } else {
+                    regex = new RegExp(stringArr[i], flags[i]); // create a regular expression from the string provided by user
+                }
 
-            let array; // will hold information about each occurrence
+                let array; // will hold information about each occurrence
 
-            while ((array = regex.exec(currentNode.textContent)) !== null) { // while an occurence is found
+                while ((array = regex.exec(currentNode.textContent)) !== null) { // while an occurence is found
 
-                range.setStart(currentNode, array.index); // set the start-position of range on the current textnode on the position the occurrence is found
-                range.setEnd(currentNode, (array.index + array[0].length)) // set the end-position of range, on the current textnode, on the position where occurance is found plus the length of the string
-                range.deleteContents();
-                let span = document.createElement('font'); // create span element
-                span.textContent = array[0]; // fill the span with the matched word
-                span.style.cssText = `background-color: ${bkrColor[i]}; color: ${color[i]};border-radius: 3px; box-shadow: #c4c4c4 1px 1px 3px;`; // use background color
-                span.className = 'hltd_text';
-                span.id = id[i];
-                range.insertNode(span); // insert node where our current range is
+                    range.setStart(currentNode, array.index); // set the start-position of range on the current textnode on the position the occurrence is found
+                    range.setEnd(currentNode, (array.index + array[0].length)) // set the end-position of range, on the current textnode, on the position where occurance is found plus the length of the string
+                    range.deleteContents();
+                    let span = document.createElement('font'); // create span element
+                    span.textContent = array[0]; // fill the span with the matched word
+                    span.style.cssText = `background-color: ${bkrColor[i]}; color: ${color[i]};border-radius: 3px; box-shadow: #c4c4c4 1px 1px 3px;`; // use background color
+                    span.className = 'hltd_text';
+                    span.id = id[i];
+                    range.insertNode(span); // insert node where our current range is
+                }
             }
         }
 
@@ -169,7 +171,7 @@ chrome.runtime.onMessage.addListener(
             initialize();
         };
         if (request.command.id) {
-            removeHighlight(document.querySelectorAll(`#${request.command.id}`))
+            removeHighlight(document.querySelectorAll(`${request.command.id}`))
         }
         if (request.command.query) {
             initializeSingle(request.command.query);

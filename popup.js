@@ -60,7 +60,7 @@ function newLine(e) {
     }
 
     if (e.keyCode === 8) {
-        chrome.runtime.sendMessage({ command: { message: 'delete', id: e.path[0].id } })
+        chrome.runtime.sendMessage({ command: { message: 'delete', id: `#${e.path[0].id}` } })
     }
 
     if (e.keyCode === 38 && e.path[1].previousElementSibling) {
@@ -86,17 +86,17 @@ function startHighlight(e) {
     let color = e.path[1].querySelector('[name="color"]').value;
     let flags = e.path[1].querySelector('[class^="flag"]').className;
     let id = e.path[0].id;
-    console.log('dsf', query, bkrColor, color, flags, id);
     chrome.runtime.sendMessage({ command: { query: [query, bkrColor, color, flags, id] } })
 };
 
 function toggleFlag(e) {
-    let elClass = e.path[0].className
+    let elClass = e.path[0].className;
     if (elClass === 'flag-off') {
         e.path[0].className = 'flag-on'
     } else {
         e.path[0].className = 'flag-off';
     }
+    store(e);
 }
 
 function setAttributes(el, attributes) {
@@ -153,9 +153,32 @@ function colorPicked(e) {
     let color = e.target.value;
     let colorType = e.target.name;
     let queryId = e.target.parentElement.querySelector('textarea').id;
-    chrome.runtime.sendMessage({ command: { changeColor: {colorType: colorType, queryId: queryId, color: color} } });
+    chrome.runtime.sendMessage({ command: { changeColor: { colorType: colorType, queryId: queryId, color: color } } });
 };
 
-$('#clear').onclick = (e)=>{
+document.getElementById('clear').onclick = (e) => {
+    let items = document.querySelectorAll('.item');
+    for (i = 1; i < items.length; i++) {
+        items[i].remove();
+    }
+    items[0].children[1].value = '';
+    chrome.runtime.sendMessage({ command: { message: 'delete', id:  '.hltd_text'} });
+    store(e);
+}
 
+document.getElementById('this-domain').onclick = (e) => {
+    let globalList = document.getElementById('list');
+    let domainList = document.getElementById('domain');
+
+    if(globalList.style.display === "none"){
+        domainList.style.display = "none";
+        globalList.style.display = ""
+        globalList.firstElementChild.className = "item";
+        domainList.firstElementChild.className = "item-hidden";
+    }else{
+        globalList.style.display = "none"
+        domainList.style.display = "";
+        globalList.firstElementChild.className = "item-hidden";
+        domainList.firstElementChild.className = "item";
+    }
 }
