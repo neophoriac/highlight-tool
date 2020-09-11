@@ -20,9 +20,11 @@ chrome.storage.local.get(['queryItems'], function (result) {
 });
 
 function haw(result) {
-    queries = result.queryItems.queries;
-    queryInfo =  queriesArr['queryInfo'] = result.queryItems.queryInfo;
-    console.log(queriesArr, queries)
+    if (result.queryItems) {
+        queries = result.queryItems.queries;
+        queryInfo = queriesArr['queryInfo'] = result.queryItems.queryInfo;
+        console.log(queriesArr, queries)
+    }
 }
 
 function store(e) {
