@@ -25,7 +25,7 @@ function newLine(e) {
 
             let els = createElements(['div', { class: 'item', id: `div_item_${textarea.length + 1}` }],
                 ['input', { type: 'checkbox', id: `chkbx${textarea.length + 1}` }],
-                ['textarea', { name: 'textarea', id: `item_${textarea.length + 1}`, class: 'textarea', cols: 30, rows: 1 }],
+                ['textarea', { name: 'textarea', id: `item_${e.target.parentElement.parentElement.className + (textarea.length + 1)}`, class: 'textarea', cols: 30, rows: 1 }],
                 ['button', { class: 'flag-on', name: 'button' }],
                 ['input', { type: 'color', name: 'bkgrColor', class: 'color', value: colorsArr[0] }],
                 ['input', { type: 'color', name: 'color', class: 'color', value: colorsArr[1] }],
@@ -60,7 +60,8 @@ function newLine(e) {
     }
 
     if (e.keyCode === 8) {
-        chrome.runtime.sendMessage({ command: { message: 'delete', id: `#${e.path[0].id}` } })
+        console.log(e.target.id)
+        chrome.runtime.sendMessage({ command: { message: 'delete', id: e.target.id } })
     }
 
     if (e.keyCode === 38 && e.path[1].previousElementSibling) {
@@ -164,8 +165,8 @@ document.getElementById('clear').onclick = (e) => {
     items[0].children[1].value = '';
     chrome.runtime.sendMessage({ command: { message: 'delete', id:  '.hltd_text'} });
     store(e);
+    chrome.storage.local.remove(['queryItems']);
 }
-
 
 document.getElementById('this-domain').onclick = (e) => {
     let globalList = document.getElementById('list');
@@ -183,4 +184,5 @@ document.getElementById('this-domain').onclick = (e) => {
 let domainList = document.getElementById('domain')
 chrome.runtime.sendMessage({ command: "getLocation"}, function (response){
     domainList.className = response.host;
+    // domainList.firstElementChild.querySelector('textarea').className = 
 });

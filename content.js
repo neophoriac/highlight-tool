@@ -171,7 +171,7 @@ chrome.runtime.onMessage.addListener(
             initialize();
         };
         if (request.command.id) {
-            removeHighlight(document.querySelectorAll(`${request.command.id}`))
+            removeHighlight(document.querySelectorAll(`[id="${request.command.id}"]`))
         }
         if (request.command.query) {
             initializeSingle(request.command.query);
@@ -183,15 +183,23 @@ chrome.runtime.onMessage.addListener(
 
 function initialize() {
     chrome.storage.local.get(['queryItems'], function (result) {
-        let queryItems = result.queryItems.queries;
+        let Completedlist = result.queryItems.queries.globalList;
+        let domainList = result.queryItems.queries[location.host]
 
-        console.log(queryItems)
+                    Object.assign(Completedlist, domainList);
+
+        // let target = {};
+        // Object.keys(queryItems).forEach(key => {
+        //     Object.assign(target, queryItems[key]);
+        // })
+
+        console.log(Completedlist, domainList)
         let list = {
-            queryItems,
+            Completedlist,
             getProperty: function (property) {
                 let arr = [];
-                Object.keys(this.queryItems).forEach(key => {
-                    arr.push(this.queryItems[key][property]);
+                Object.keys(this.Completedlist).forEach(key => {
+                    arr.push(this.Completedlist[key][property]);
                 })
                 return arr;
             }
