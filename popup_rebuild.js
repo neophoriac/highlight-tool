@@ -4,10 +4,14 @@ let host;
 chrome.runtime.sendMessage({ command: "getLocation" }, function (response) {
 
     chrome.storage.local.get(['globalList', response.host], function (result) {
-        build(result.globalList.queryInfo, 'globalList')
-        build(result[response.host].queryInfo, response.host)
+        if (result.globalList) {
+            build(result.globalList.queryInfo, 'globalList');
+        }
+        if (result[response.host]) {
+            build(result[response.host].queryInfo, response.host);
+        }
     });
-    
+
 });
 
 function build(list, className) {
@@ -31,7 +35,7 @@ function build(list, className) {
 
             let createdEls = createElements(['div', { class: 'item', id: `div_${id[i]}` }],
                 ['input', { type: 'checkbox', id: `chkbx${i}` }],
-                ['textarea', { name: 'textarea', id: `${id[i]}`, class: 'textarea', cols: 30, rows: 1 }],
+                ['textarea', { name: 'textarea', id: `${id[i]}`, class: 'textarea', maxlength: 30, cols: 30, rows: 1 }],
                 ['button', { class: flags[i], name: 'button' }],
                 ['input', { type: 'color', name: 'bkgrColor', class: 'color', value: bkrColor[i] }],
                 ['input', { type: 'color', name: 'color', class: 'color', value: color[i] }],

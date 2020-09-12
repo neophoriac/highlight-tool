@@ -25,7 +25,7 @@ function newLine(e) {
 
             let els = createElements(['div', { class: 'item', id: `div_item_${textarea.length + 1}` }],
                 ['input', { type: 'checkbox', id: `chkbx${textarea.length + 1}` }],
-                ['textarea', { name: 'textarea', id: `item_${e.target.parentElement.parentElement.className + (textarea.length + 1)}`, class: 'textarea', cols: 30, rows: 1 }],
+                ['textarea', { name: 'textarea', id: `item_${e.target.parentElement.parentElement.className + (textarea.length + 1)}`, class: 'textarea', maxlength: 30, cols: 30, rows: 1 }],
                 ['button', { class: 'flag-on', name: 'button' }],
                 ['input', { type: 'color', name: 'bkgrColor', class: 'color', value: colorsArr[0] }],
                 ['input', { type: 'color', name: 'color', class: 'color', value: colorsArr[1] }],

@@ -172,13 +172,13 @@ chrome.runtime.onMessage.addListener(
         };
         if (request.command.id) {
             removeHighlight(document.querySelectorAll(`[id="${request.command.id}"]`))
-        }
+        };
         if (request.command.query) {
             initializeSingle(request.command.query);
-        }
+        };
         if (request.command.changeColor) {
             changeColor(request.command.changeColor);
-        }
+        };
     });
 
 function initialize() {
