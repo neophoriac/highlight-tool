@@ -12,20 +12,20 @@ class QueryLine {
 };
 
 
-let queriesArr = {};
-let queries = {};
-let queryInfo = queriesArr['queryInfo'] = {};
-chrome.storage.local.get(['queryItems'], function (result) {
-    haw(result)
-});
 
-function haw(result) {
-    if (result.queryItems) {
-        queries = result.queryItems.queries;
-        queryInfo = queriesArr['queryInfo'] = result.queryItems.queryInfo;
-        console.log(queriesArr, queries)
-    }
-}
+// chrome.storage.local.get(['queryItems'], function (result) {
+//     haw(result)
+// });
+
+// function haw(result) {
+//     if (result.queryItems) {
+//         queries = result.queryItems.queries;
+//         queryInfo = queriesArr['queryInfo'] = result.queryItems.queryInfo;
+//         console.log(queriesArr, queries)
+//     }
+// }
+let queriesArr = {};
+let domain;
 
 function store(e) {
 
@@ -33,7 +33,11 @@ function store(e) {
     indication.style.visibility = "visible";
     let lists = document.getElementsByName('list');
     lists.forEach(list => {
-        queries[list.className] = {};
+        let domain = list.className
+
+        queriesArr[list.className] = {};
+        let queries = {};
+
         let items = list.querySelectorAll('.item');
         let patternArr = [];
         let flagArr = [];
@@ -48,7 +52,7 @@ function store(e) {
             let color = item.querySelector('[name="color"]').value;
             let id = item.querySelector('.textarea').id;
             if (flag.className === 'flag-on') { flag = 'gi' } else { flag = 'g' };
-            queries[list.className][pattern] = new QueryLine(pattern, bkrColor, color, flag, true, document.body, id);
+            queries[pattern] = new QueryLine(pattern, bkrColor, color, flag, true, document.body, id);
 
             patternArr.push(pattern);
             flagArr.push(flag);
@@ -57,15 +61,16 @@ function store(e) {
             idArr.push(id);
         });
 
-        queryInfo[list.className] = [patternArr, flagArr, bkrColorArr, colorArr, idArr];
-        queriesArr['queries'] = queries;
-        chrome.storage.local.set({ queryItems: queriesArr }, function () {
+        queriesArr[list.className]['queryInfo'] = [patternArr, flagArr, bkrColorArr, colorArr, idArr];
+        queriesArr[list.className]['queries'] = queries;
+        chrome.storage.local.set(queriesArr, function () {
             indication.style.visibility = "hidden";
             // chrome.runtime.sendMessage({ command: 'initialize' })
+            console.log(queriesArr)
         });
 
-        chrome.storage.local.get(['queryItems'], function (result) {
-            console.log(result.queryItems);
+        chrome.storage.local.get(['globalList', domain], function (result) {
+            console.log("sfg", result);
         });
     })
 };

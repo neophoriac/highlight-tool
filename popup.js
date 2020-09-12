@@ -57,6 +57,7 @@ function newLine(e) {
         e.path[1].remove();
         previousEl.focus();
         previousEl.setSelectionRange(pos, pos);
+        store(e);
     }
 
     if (e.keyCode === 8) {
@@ -165,7 +166,7 @@ document.getElementById('clear').onclick = (e) => {
     items[0].children[1].value = '';
     chrome.runtime.sendMessage({ command: { message: 'delete', id:  '.hltd_text'} });
     store(e);
-    chrome.storage.local.remove(['queryItems']);
+    chrome.storage.local.clear()
 }
 
 document.getElementById('this-domain').onclick = (e) => {

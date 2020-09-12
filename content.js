@@ -1,11 +1,11 @@
 let queries = [];
 
-let pattern = '';
-let bkrColor = '';
-let color = '';
-let flags = '';
-let onlyWords = '';
-let id = '';
+let pattern = [];
+let bkrColor = [];
+let color = [];
+let flags = [];
+let onlyWords = [];
+let id = [];
 
 function highlightText_2(stringArr, bkrColor = 'yellow', color = '#000', flags = 'ig', onlyWords = true, root = document.body, id) {
     console.time(`query_${stringArr}`);
@@ -182,18 +182,20 @@ chrome.runtime.onMessage.addListener(
     });
 
 function initialize() {
-    chrome.storage.local.get(['queryItems'], function (result) {
-        let Completedlist = result.queryItems.queries.globalList;
-        let domainList = result.queryItems.queries[location.host]
-
-                    Object.assign(Completedlist, domainList);
+    chrome.storage.local.get(['globalList', location.host], function (result) {
+        if (!result.globalList) { return }
+        let Completedlist = result.globalList.queries;
+        let domainList
+        if (result[location.host]) {
+            domainList = result[location.host].queries;
+            Object.assign(Completedlist, domainList);
+        };
 
         // let target = {};
         // Object.keys(queryItems).forEach(key => {
         //     Object.assign(target, queryItems[key]);
         // })
 
-        console.log(Completedlist, domainList)
         let list = {
             Completedlist,
             getProperty: function (property) {
@@ -212,7 +214,6 @@ function initialize() {
         let root = list.getProperty('root');
         id = list.getProperty('id');
 
-        console.log(id)
         highlightText_2(pattern, bkrColor, color, flags, onlyWords, document.body, id)
     })
 }
@@ -220,15 +221,21 @@ function initialize() {
 function initializeSingle(query) {
     if (query[3] === 'flag-on') { query[3] = 'gi' } else { query[3] = 'g' };
 
-    highlightText_2([query[0]], [query[1]], [query[2]], [query[3]], [true], document.body, [query[4]])
+    pattern.push(query[0]);
+    bkrColor.push(query[1]);
+    color.push(query[2]);
+    flags.push(query[3]);
+    onlyWords.push(true);
+    id.push(query[4]);
+
+    highlightText_2(pattern, bkrColor, color, flags, onlyWords, document.body, id)
 }
 
 function changeColor(info) {
     let color = info.color;
     let colorType = info.colorType;
     let queryId = info.queryId;
-    let instances = document.querySelectorAll(`#${queryId}`)
-    console.log(instances)
+    let instances = document.querySelectorAll(`[id="${queryId}"]`)
     if (colorType === 'bkgrColor') {
         instances.forEach(instance => { instance.style.backgroundColor = info.color })
     } else {
