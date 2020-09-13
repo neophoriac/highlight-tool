@@ -50,6 +50,7 @@ function build(list, className) {
             createdEls.span1.textContent = "|";
 
             createdEls.textarea1.onkeydown = newLine;
+            createdEls.input1.onclick = enableOptions;
             // createdEls.textarea1.onkeyup = startHighlight;
             createdEls.button1.onclick = toggleFlag;
             createdEls.input2.onchange = colorPicked;

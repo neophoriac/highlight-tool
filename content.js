@@ -171,7 +171,8 @@ chrome.runtime.onMessage.addListener(
             initialize();
         };
         if (request.command.id) {
-            removeHighlight(document.querySelectorAll(`[id="${request.command.id}"]`))
+            removeHighlight(document.querySelectorAll(request.command.id[0]));
+            spliceArrs(request.command.id[1])
         };
         if (request.command.query) {
             initializeSingle(request.command.query);
@@ -240,5 +241,26 @@ function changeColor(info) {
         instances.forEach(instance => { instance.style.backgroundColor = info.color })
     } else {
         instances.forEach(instance => { instance.style.color = info.color })
+    }
+}
+
+function spliceArrs(result) {
+    if (result !== "all") {
+        let index = id.indexOf(result)
+        if (index !== -1) {
+            pattern.splice(index, 1)
+            bkrColor.splice(index, 1)
+            color.splice(index, 1)
+            flags.splice(index, 1)
+            onlyWords.splice(index, 1)
+            id.splice(index, 1)
+        }
+    } else {
+        pattern = [];
+        bkrColor = [];
+        color = [];
+        flags = [];
+        onlyWords = [];
+        id = [];
     }
 }

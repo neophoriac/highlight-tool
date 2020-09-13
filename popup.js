@@ -1,3 +1,5 @@
+let isChecked = false;
+
 let textarea = document.getElementsByClassName('textarea');
 let save = document.getElementById('save');
 let list = document.getElementById('list');
@@ -41,6 +43,7 @@ function newLine(e) {
             els.span1.textContent = "|";
 
             els.textarea1.onkeydown = newLine;
+            els.input1.onclick = enableOptions;
             // els.textarea1.onkeyup = startHighlight;
             els.button1.onclick = toggleFlag;
             els.input2.onchange = colorPicked;
@@ -57,12 +60,19 @@ function newLine(e) {
         e.path[1].remove();
         previousEl.focus();
         previousEl.setSelectionRange(pos, pos);
+
+        // let query = previousEl.value;
+        // let bkrColor = previousEl.parentElement.querySelector('[name="bkgrColor"]').value;
+        // let color = previousEl.parentElement.querySelector('[name="color"]').value;
+        // let flags =previousEl.parentElement.querySelector('[class^="flag"]').className;
+        // let id = previousEl.id;
+        // chrome.runtime.sendMessage({ command: { query: [query, bkrColor, color, flags, id] } });
+
         store(e);
     }
 
     if (e.keyCode === 8) {
-        console.log(e.target.id)
-        chrome.runtime.sendMessage({ command: { message: 'delete', id: e.target.id } })
+        chrome.runtime.sendMessage({ command: { message: 'delete', id: [`[id="${e.target.id}"]`, e.target.id] } })
     }
 
     if (e.keyCode === 38 && e.path[1].previousElementSibling) {
@@ -150,6 +160,13 @@ for (i = 0; i < colors.length; i++) {
     colors[i].onchange = colorPicked
 }
 
+let checkboxes = document.querySelectorAll('[type="checkbox"]')
+
+checkboxes.forEach(checkbox => {
+    checkbox.onclick = enableOptions
+
+})
+
 function colorPicked(e) {
     store(e);
     let color = e.target.value;
@@ -160,30 +177,62 @@ function colorPicked(e) {
 
 document.getElementById('clear').onclick = (e) => {
     let items = document.querySelectorAll('.item');
-    for (i = 1; i < items.length; i++) {
-        items[i].remove();
+    if (isChecked === false) {
+        for (i = 1; i < items.length; i++) {
+            items[i].remove();
+        }
+        items[0].children[1].value = '';
+        chrome.runtime.sendMessage({ command: { message: 'delete', id: ['.hltd_text', 'all'] } });
+        chrome.storage.local.clear()
+
+    } else {
+        let checkboxes = document.querySelectorAll('[type="checkbox"]');
+        let arr = [];
+        let ids = [];
+        checkboxes.forEach(checkbox => {
+            if (checkbox.checked === true) {
+                arr.push(checkbox);
+                ids.push(checkbox.nextElementSibling.id)
+            }
+            for (i = 0; i < arr.length; i++) {
+                arr[i].parentElement.remove();
+                chrome.runtime.sendMessage({ command: { message: 'delete', id: [`[id="${ids[i]}"]`, ids[i]] } });
+            }
+        })
     }
-    items[0].children[1].value = '';
-    chrome.runtime.sendMessage({ command: { message: 'delete', id:  '.hltd_text'} });
     store(e);
-    chrome.storage.local.clear()
 }
 
 document.getElementById('this-domain').onclick = (e) => {
     let globalList = document.getElementById('list');
     let domainList = document.getElementById('domain');
 
-    if(globalList.style.display === "none"){
+    if (globalList.style.display === "none") {
         domainList.style.display = "none";
         globalList.style.display = ""
-    }else{
+    } else {
         globalList.style.display = "none"
         domainList.style.display = "";
     }
 }
 
 let domainList = document.getElementById('domain')
-chrome.runtime.sendMessage({ command: "getLocation"}, function (response){
+chrome.runtime.sendMessage({ command: "getLocation" }, function (response) {
     domainList.className = response.host;
     // domainList.firstElementChild.querySelector('textarea').className = 
 });
+
+function enableOptions(e) {
+
+    checkboxes = document.querySelectorAll('[type="checkbox"]')
+    for (i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i].checked === true) {
+            document.getElementById('clear').textContent = "Clear Selected";
+            isChecked = true;
+            break;
+        } else {
+            document.getElementById('clear').textContent = "Clear";
+            isChecked = false;
+        }
+    }
+}

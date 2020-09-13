@@ -31,7 +31,7 @@ function store(e) {
 
     let indication = document.getElementById('saving')
     indication.style.visibility = "visible";
-    let lists = document.getElementsByName('list');
+    let lists = document.querySelectorAll('[name^="list"]');
     lists.forEach(list => {
         let domain = list.className
 
