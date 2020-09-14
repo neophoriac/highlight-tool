@@ -141,7 +141,7 @@ function getColor() {
         hexColor.push(arr.join('')); // join array values to get hex color
     };
 
-    let Y = rgb[0] * 0.2126 + rgb[1] * 0.7152 + rgb[2] * 0.0722; // calculate relative luminance with formula provided by ITU-R BT.709 color space standards
+    let Y = rgb[0] * 0.2126 + rgb[1] * 0.7152 + rgb[2] * 0.0722; // calculate relative luminance with formula provided by ITU-R BT.709 color space standards src: https://en.wikipedia.org/wiki/Relative_luminance
     let color;
     Y >= 145 ? color = '#000000' : color = '#ffffff'; // if rgb is dark, color is white, else color is black
 
@@ -198,6 +198,8 @@ document.getElementById('clear').onclick = (e) => {
                 arr[i].parentElement.remove();
                 chrome.runtime.sendMessage({ command: { message: 'delete', id: [`[id="${ids[i]}"]`, ids[i]] } });
             }
+            document.querySelector('.trash').src = "images/trash-alt-solid.svg";
+            document.querySelector('.groupColors').style.display = "none";
         })
     }
     store(e);
@@ -210,9 +212,11 @@ document.getElementById('this-domain').onclick = (e) => {
     if (globalList.style.display === "none") {
         domainList.style.display = "none";
         globalList.style.display = ""
+        e.target.textContent = "This Site's List"
     } else {
         globalList.style.display = "none"
         domainList.style.display = "";
+        e.target.textContent = "Global List"
     }
 }
 
@@ -227,12 +231,16 @@ function enableOptions(e) {
     checkboxes = document.querySelectorAll('[type="checkbox"]')
     for (i = 0; i < checkboxes.length; i++) {
         if (checkboxes[i].checked === true) {
-            document.getElementById('clear').textContent = "Clear Selected";
+            document.querySelector('.trash').src = "images/eraser-solid.svg"
+            document.querySelector('.groupColors').style.display = "inline-flex";
             isChecked = true;
             break;
         } else {
-            document.getElementById('clear').textContent = "Clear";
+            document.querySelector('.trash').src = "images/trash-alt-solid.svg";
+            document.querySelector('.groupColors').style.display = "none";
             isChecked = false;
         }
     }
 }
+
+// document.getElementsByName('groupBkgrColor')[0]

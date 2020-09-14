@@ -5,8 +5,6 @@
 
 body {
     background-color: #5171A5;
-    border-radius: 5px;
-    transition: height 1s;
 }
 
 .item {
@@ -26,7 +24,6 @@ body {
     height: 20px;
     padding: 0px;
     background-color: #38517a;
-
 }
 
 .flag-off {
@@ -61,8 +58,9 @@ body {
 }
 
 .wrap {
-    overflow:hidden;
+    overflow: auto;
     border: 3px dotted #3F3047;
+    max-height: 510px;
 }
 
 #list {
@@ -111,7 +109,47 @@ body {
     margin-top: 3px;
 }
 
-#this-domain{
-    margin-left: 20%;
+#this-domain {
+    position: absolute;
+    left: 35%;
     width: 106px;
+    margin-top: 8px;
+    box-shadow: 2px 2px 3px 1px rgba(30,43,64,1);
+}
+
+#this-domain:active {
+    width: 105.5px;
+    height: 16.5px;
+    font-size: 12.6666px;
+    box-shadow: none;
+}
+#clear {
+    display: inline-flex;
+    position: relative;
+    top: 3px;
+    justify-content: center;
+    background-color: #38517a;
+    outline: none;
+    width:26px;
+    height: 24px;
+    border-radius: 25px;
+    box-shadow: 2px 2px 3px 1px rgba(30,43,64,1);
+    cursor: pointer;
+}
+
+#clear:active {
+    width: 25.5px;
+    height: 23.5px;
+    box-shadow: none;
+}
+
+.footer {
+    height: 26px;
+}
+
+.groupColors {
+    display: inline-flex;
+    margin-left: 23px;
+    box-shadow: 2px 1px 3px 1px rgba(30,43,64,1);
+    display: none;
 }

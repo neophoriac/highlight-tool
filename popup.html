@@ -11,35 +11,44 @@
 <body>
     <div class="header">
         <h3 id="title" style="color: #FCD0A1">Highlight Tool</h3>
-        <div style = "display: flex" id = "saving">
-            <span style = "color: white; margin-right: 4px">Saving..</span>
+        <div style="display: flex" id="saving">
+            <span style="color: white; margin-right: 4px">Saving..</span>
             <img id="saving-svg" src="images/Pulse-1.3s-200px.svg" alt="saving">
         </div>
     </div>
     <div class="container">
         <div class="wrap">
-        <div id="list" name="list" class="globalList">
-            <div id="div_item_1" class="item">
-                <input type="checkbox" id="chkbx1">
-                <textarea name="textarea" id="item_globalList1" class="textarea" maxlength="30" cols="30" rows="1"></textarea>
-                <button class="flag-on" name="button">Cs</button>
-                <span>|</span>
-                <input type="color" name="bkgrColor" class="color" value="#FFFF00">
-                <input type="color" name="color" class="color" value="#000000">
+            <div id="list" name="list" class="globalList">
+                <div id="div_item_1" class="item">
+                    <input type="checkbox" id="chkbx1">
+                    <textarea name="textarea" id="item_globalList1" class="textarea" maxlength="30" cols="30"
+                        rows="1"></textarea>
+                    <button class="flag-on" name="button">Cs</button>
+                    <span>|</span>
+                    <input type="color" name="bkgrColor" class="color" value="#FFFF00">
+                    <input type="color" name="color" class="color" value="#000000">
+                </div>
             </div>
-        </div>
-        <div id="domain" class="" name="list" style="display:none">
-            <div id="div_item_1" class="item">
-                <input type="checkbox" id="chkbx1">
-                <textarea name="textarea" id="item_1" class="textarea" maxlength="30" cols="30" rows="1"></textarea>
-                <button class="flag-on" name="button">Cs</button>
-                <span>|</span>
-                <input type="color" name="bkgrColor" class="color" value="#FFFF00">
-                <input type="color" name="color" class="color" value="#000000">
+            <div id="domain" class="" name="list" style="display:none">
+                <div id="div_item_1" class="item">
+                    <input type="checkbox" id="chkbx1">
+                    <textarea name="textarea" id="item_1" class="textarea" maxlength="30" cols="30" rows="1"></textarea>
+                    <button class="flag-on" name="button">Cs</button>
+                    <span>|</span>
+                    <input type="color" name="bkgrColor" class="color" value="#FFFF00">
+                    <input type="color" name="color" class="color" value="#000000">
+                </div>
             </div>
         </div>
     </div>
-        <button id="clear" class="button-below">Clear</button>
+    <div class="footer">
+        <div id="clear">
+            <img class="trash" style="width: 13px" src="images/trash-alt-solid.svg" alt="">
+        </div>
+        <div class="groupColors">
+            <input type="color" name="groupBkgrColor" class="color" value="#FFFF00">
+            <input type="color" name="groupColor" class="color" value="#000000">
+        </div>
         <button id="this-domain" class="button-below">This Site's List</button>
         <img class="settings" src="images/icons8-settings.svg" alt="">
     </div>
