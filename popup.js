@@ -31,7 +31,7 @@ function newLine(e) {
                 ['button', { class: 'flag-on', name: 'button' }],
                 ['input', { type: 'color', name: 'bkgrColor', class: 'color', value: colorsArr[0] }],
                 ['input', { type: 'color', name: 'color', class: 'color', value: colorsArr[1] }],
-                );
+            );
 
             appendChilds(els.div1, [els.input1, els.textarea1, els.button1, els.input2, els.input3]);
 
@@ -177,13 +177,16 @@ function colorPicked(e) {
 document.getElementById('clear').onclick = (e) => {
     let items = document.querySelectorAll('.item');
     if (isChecked === false) {
-        for (i = 1; i < items.length; i++) {
-            items[i].remove();
-        }
-        items[0].children[1].value = '';
-        chrome.runtime.sendMessage({ command: { message: 'delete', id: ['.hltd_text', 'all'] } });
-        chrome.storage.local.clear()
-
+        let lists = document.getElementsByName('list')
+        lists.forEach(list => {
+            items = list.querySelectorAll('.item');
+            for (i = 1; i < items.length; i++) {
+                items[i].remove();
+            }
+            items[0].children[1].value = '';
+            chrome.runtime.sendMessage({ command: { message: 'delete', id: ['.hltd_text', 'all'] } });
+            chrome.storage.local.clear()
+        })
     } else {
         let checkboxes = document.querySelectorAll('[type="checkbox"]');
         let arr = [];
@@ -242,4 +245,10 @@ function enableOptions(e) {
     }
 }
 
-// document.getElementsByName('groupBkgrColor')[0]
+document.getElementsByName('groupBkgrColor')[0].onchange = e => {
+    changeGroupColor(e.target.value, "backgroundColor")
+}
+
+function changeGroupColor(value, type) {
+    console.log(value)
+}

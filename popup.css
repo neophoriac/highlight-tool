@@ -30,21 +30,19 @@ body {
     font-size: 11px;
     padding: 0px 2px;
     outline: none;
-    background-color: #38517a;
-    border: 1px dotted #3F3047;
-    color: white;
+    background-color: #1a73e8;
+    border: 1px solid #dadce0;
     margin: 2px 5px 2px 5px;
+    color: white;
 }
 
 .flag-on {
     font-size: 11px;
     padding: 0px 2px;
     outline: none;
-    background-color: #38517a;
-    border: 1px dotted #3F3047;
+    background-color: white;
+    border: 1px solid #dadce0;
     margin: 2px 5px 2px 5px;
-    text-decoration: line-through;
-    color: white;
 }
 
 .tabs {
@@ -110,39 +108,36 @@ body {
     width: 22px;
     float: right;
     cursor: pointer;
-    margin-top: 3px;
+    margin-top: 6%;
 }
 
 #this-domain {
     position: absolute;
     left: 35%;
     width: 106px;
-    margin-top: 8px;
+    margin-top: 15px;
 }
 
-#this-domain:active {
-    width: 105.5px;
-    height: 16.5px;
-    font-size: 12.6666px;
-    box-shadow: none;
+#this-domain:hover {
+    background-color: #1a73e8;
+    color:white;
 }
 #clear {
+    margin-top:5%;
     display: inline-flex;
     position: relative;
     top: 3px;
     justify-content: center;
-    background-color: #38517a;
     outline: none;
     width:26px;
     height: 24px;
     border-radius: 25px;
+    border: 1px solid #dadce0;
     cursor: pointer;
 }
 
-#clear:active {
-    width: 25.5px;
-    height: 23.5px;
-    box-shadow: none;
+#clear:hover {
+    border: 1px solid #1a73e8;
 }
 
 .footer {
