@@ -31,16 +31,15 @@ function newLine(e) {
                 ['button', { class: 'flag-on', name: 'button' }],
                 ['input', { type: 'color', name: 'bkgrColor', class: 'color', value: colorsArr[0] }],
                 ['input', { type: 'color', name: 'color', class: 'color', value: colorsArr[1] }],
-                'span');
+                );
 
-            appendChilds(els.div1, [els.input1, els.textarea1, els.button1, els.span1, els.input2, els.input3]);
+            appendChilds(els.div1, [els.input1, els.textarea1, els.button1, els.input2, els.input3]);
 
             e.path[1].parentNode.insertBefore(els.div1, e.path[1].nextSibling);
 
 
             els.textarea1.value = transferText;
             els.button1.textContent = "Cs";
-            els.span1.textContent = "|";
 
             els.textarea1.onkeydown = newLine;
             els.input1.onclick = enableOptions;

@@ -39,15 +39,14 @@ function build(list, className) {
                 ['button', { class: flags[i], name: 'button' }],
                 ['input', { type: 'color', name: 'bkgrColor', class: 'color', value: bkrColor[i] }],
                 ['input', { type: 'color', name: 'color', class: 'color', value: color[i] }],
-                'span')
+                )
 
-            appendChilds(createdEls.div1, [createdEls.input1, createdEls.textarea1, createdEls.button1, createdEls.span1, createdEls.input2, createdEls.input3])
+            appendChilds(createdEls.div1, [createdEls.input1, createdEls.textarea1, createdEls.button1, createdEls.input2, createdEls.input3])
 
             document.querySelector(`[class="${className}"]`).querySelector('.item').parentNode.insertBefore(createdEls.div1, document.querySelector(`[class="${className}"]`).querySelector('.item').nextSibling);
 
             createdEls.textarea1.value = textarea[i];
             createdEls.button1.textContent = "Cs";
-            createdEls.span1.textContent = "|";
 
             createdEls.textarea1.onkeydown = newLine;
             createdEls.input1.onclick = enableOptions;

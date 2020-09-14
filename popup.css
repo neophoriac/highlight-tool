@@ -1,10 +1,10 @@
 @font-face {
-    font-family: "Aventurina";
-    src: url('/fonts/Aventurina.ttf');
+    font-family: "Mukta";
+    src: url('/fonts/Mukta-SemiBold.ttf');
 }
 
 body {
-    background-color: #5171A5;
+    background-color: white;
 }
 
 .item {
@@ -23,7 +23,7 @@ body {
     width: 16px;
     height: 20px;
     padding: 0px;
-    background-color: #38517a;
+    background-color: #f7f7f7;
 }
 
 .flag-off {
@@ -59,7 +59,7 @@ body {
 
 .wrap {
     overflow: auto;
-    border: 3px dotted #3F3047;
+    border: 1px solid #c6c3d6;
     max-height: 510px;
 }
 
@@ -72,19 +72,23 @@ body {
 }
 
 #title {
-    font-family: Aventurina;
+    font-family: Mukta;
     font-size: 20px;
+    color: #1a73e8;
     margin: 0px 0px 3px 0px;
 }
 
 .button-below {
-    background-color: #38517a;
+    background-color: white;
     outline: none;
-    border: none;
-    border-radius: 5px;
+    border: 1px solid #dadce0;
+    border-radius: 4px;
+    color: #1a73e8;
     margin-top: 5px;
-    color: white;
-    font-weight: 700;
+    font-weight: 500;
+    font-family: Roboto, 'Segoe UI', Tahoma, sans-serif;
+    line-height: 20.02px;
+    height: 32px;
     cursor: pointer;
 }
 
@@ -114,7 +118,6 @@ body {
     left: 35%;
     width: 106px;
     margin-top: 8px;
-    box-shadow: 2px 2px 3px 1px rgba(30,43,64,1);
 }
 
 #this-domain:active {
@@ -133,7 +136,6 @@ body {
     width:26px;
     height: 24px;
     border-radius: 25px;
-    box-shadow: 2px 2px 3px 1px rgba(30,43,64,1);
     cursor: pointer;
 }
 
@@ -144,12 +146,11 @@ body {
 }
 
 .footer {
-    height: 26px;
+    height: 56px;
 }
 
 .groupColors {
     display: inline-flex;
     margin-left: 23px;
-    box-shadow: 2px 1px 3px 1px rgba(30,43,64,1);
     display: none;
 }
