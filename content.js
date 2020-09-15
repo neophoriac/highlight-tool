@@ -7,6 +7,14 @@ let flags = [];
 let onlyWords = [];
 let id = [];
 
+if(!localStorage.getItem('isRegex')){
+    localStorage.setItem('isRegex', 'false');
+};
+
+if(!localStorage.getItem('wholeWords')){
+    localStorage.setItem('wholeWords', 'true');
+};
+
 function highlightText_2(stringArr, bkrColor = 'yellow', color = '#000', flags = 'ig', onlyWords = true, root = document.body, id) {
     console.time(`query_${stringArr}`);
     observer.disconnect();

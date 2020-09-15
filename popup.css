@@ -5,6 +5,7 @@
 
 body {
     background-color: white;
+    width: 324px;
 }
 
 .item {
@@ -104,7 +105,7 @@ body {
     visibility: hidden;
 }
 
-.settings {
+#settings {
     width: 22px;
     float: right;
     cursor: pointer;
@@ -147,5 +148,9 @@ body {
 .groupColors {
     display: inline-flex;
     margin-left: 23px;
+    display: none;
+}
+
+#settings-page {
     display: none;
 }

@@ -92,7 +92,12 @@ function newLine(e) {
 }
 
 function startHighlight(e) {
-    let query = e.path[0].value;
+    let query;
+    if (localStorage.getItem('isRegex') === "false") {
+        query = e.path[0].value.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'); // -bobince & fregante : https://stackoverflow.com/questions/3561493/is-there-a-regexp-escape-function-in-javascript
+    } else {
+        query = e.path[0].value;
+    }
     let bkrColor = e.path[1].querySelector('[name="bkgrColor"]').value;
     let color = e.path[1].querySelector('[name="color"]').value;
     let flags = e.path[1].querySelector('[class^="flag"]').className;
@@ -103,7 +108,7 @@ function startHighlight(e) {
 function toggleFlag(e) {
     let elClass = e.path[0].className;
     if (elClass === 'flag-off') {
-        e.path[0].className = 'flag-on'
+        e.path[0].className = 'flag-on';
     } else {
         e.path[0].className = 'flag-off';
     }
@@ -136,15 +141,18 @@ function getColor() {
             if (arr[i] === 14) { arr[i] = "e" };
             if (arr[i] === 15) { arr[i] = "f" };
         };
-
+        if (arr.length === 1) { arr[0] = '0' + arr[0] } // if result is a single character or digit add 0 in front
+        if (rgb[j] === 0) { arr.push('00') }; // if random rgb color was 0 then array will be empty, so push 00 to array as it is appropriate
         hexColor.push(arr.join('')); // join array values to get hex color
     };
+
+    hexColor = '#' + hexColor.join(''); // complete hex color code
 
     let Y = rgb[0] * 0.2126 + rgb[1] * 0.7152 + rgb[2] * 0.0722; // calculate relative luminance with formula provided by ITU-R BT.709 color space standards src: https://en.wikipedia.org/wiki/Relative_luminance
     let color;
     Y >= 145 ? color = '#000000' : color = '#ffffff'; // if rgb is dark, color is white, else color is black
 
-    return ['#' + hexColor.join(''), color, rgb, Y]; // return all info in an array
+    return [hexColor, color, rgb, Y]; // return all info in an array
 };
 
 let flagButtons = document.getElementsByName('button');
@@ -159,7 +167,7 @@ for (i = 0; i < colors.length; i++) {
     colors[i].onchange = colorPicked
 }
 
-let checkboxes = document.querySelectorAll('[type="checkbox"]')
+let checkboxes = document.querySelectorAll('[id^="chkbx"]')
 
 checkboxes.forEach(checkbox => {
     checkbox.onclick = enableOptions
@@ -188,7 +196,7 @@ document.getElementById('clear').onclick = (e) => {
             chrome.storage.local.clear()
         })
     } else {
-        let checkboxes = document.querySelectorAll('[type="checkbox"]');
+        let checkboxes = document.querySelectorAll('[id^="chkbx"]');
         let arr = [];
         let ids = [];
         checkboxes.forEach(checkbox => {
@@ -230,7 +238,7 @@ chrome.runtime.sendMessage({ command: "getLocation" }, function (response) {
 
 function enableOptions(e) {
 
-    checkboxes = document.querySelectorAll('[type="checkbox"]')
+    checkboxes = document.querySelectorAll('[id^="chkbx"]')
     for (i = 0; i < checkboxes.length; i++) {
         if (checkboxes[i].checked === true) {
             document.querySelector('.trash').src = "images/eraser-solid.svg"
@@ -246,9 +254,30 @@ function enableOptions(e) {
 }
 
 document.getElementsByName('groupBkgrColor')[0].onchange = e => {
-    changeGroupColor(e.target.value, "backgroundColor")
+    changeGroupColor(e.target.value, "bkgrColor")
+};
+
+document.getElementsByName('groupColor')[0].onchange = e => {
+    changeGroupColor(e.target.value, "color")
 }
 
-function changeGroupColor(value, type) {
-    console.log(value)
+function changeGroupColor(value, name) {
+    checkboxes = document.querySelectorAll('[id^="chkbx"]');
+    checkboxes.forEach(checkbox => {
+        if (checkbox.checked === true) {
+            checkbox.parentElement.querySelector(`[name=${name}]`).value = value;
+
+            let color = value;
+            let colorType = name;
+            let queryId = checkbox.parentElement.querySelector('textarea').id;
+            chrome.runtime.sendMessage({ command: { changeColor: { colorType: colorType, queryId: queryId, color: color } } });
+        };
+    });
+    store();
+};
+
+document.getElementById('settings').onclick = e => {
+    document.getElementById('settings-page').style.display = "inline";
+    document.querySelector('.container').style.display = "none";
+    document.querySelector('.footer').style.display = "none";
 }

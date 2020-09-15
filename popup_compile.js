@@ -11,7 +11,13 @@ class QueryLine {
     };
 };
 
+if (!localStorage.getItem('isRegex')) {
+    localStorage.setItem('isRegex', 'false');
+}
 
+if (!localStorage.getItem('wholeWords')) {
+    localStorage.setItem('wholeWords', 'true');
+}
 
 // chrome.storage.local.get(['queryItems'], function (result) {
 //     haw(result)
@@ -26,6 +32,12 @@ class QueryLine {
 // }
 let queriesArr = {};
 let domain;
+let isRegex;
+if (localStorage.getItem('isRegex') === 'false') {
+    isRegex = false;
+} else {
+    isRegex = true;
+}
 
 function store(e) {
 
@@ -46,7 +58,12 @@ function store(e) {
         let idArr = [];
 
         items.forEach(item => {
-            let pattern = item.querySelector('.textarea').value;
+            let pattern
+            if (isRegex === false) {
+                pattern = item.querySelector('.textarea').value.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');  // -bobince & fregante : https://stackoverflow.com/questions/3561493/is-there-a-regexp-escape-function-in-javascript
+            } else {
+                pattern = item.querySelector('.textarea').value
+            }
             let flag = item.querySelector('[class^="flag"]');
             let bkrColor = item.querySelector('[name="bkgrColor"]').value;
             let color = item.querySelector('[name="color"]').value;
@@ -66,11 +83,6 @@ function store(e) {
         chrome.storage.local.set(queriesArr, function () {
             indication.style.visibility = "hidden";
             // chrome.runtime.sendMessage({ command: 'initialize' })
-            console.log(queriesArr)
-        });
-
-        chrome.storage.local.get(['globalList', domain], function (result) {
-            console.log("sfg", result);
         });
     })
 };
