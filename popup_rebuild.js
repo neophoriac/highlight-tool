@@ -3,9 +3,9 @@ let host;
 
 chrome.runtime.sendMessage({ command: "getLocation" }, function (response) {
 
-    chrome.storage.local.get(['globalList', response.host], function (result) {
+    chrome.storage.local.get(['globalList', response.host, 'settings'], function (result) {
         if (result.globalList) {
-            build(result.globalList.queryInfo, 'globalList');
+            build(result.globalList.queryInfo, 'globalList', result.settings);
         }
         if (result[response.host]) {
             build(result[response.host].queryInfo, response.host);
@@ -14,12 +14,10 @@ chrome.runtime.sendMessage({ command: "getLocation" }, function (response) {
 
 });
 
-function build(list, className) {
+function build(list, className, settings) {
     let queryLine = []; // will be filled with the appended query lines
 
     let queryItems = list;
-
-    console.log(queryItems)
 
     let textarea = queryItems[0].reverse();
     let flags = queryItems[1].reverse();
@@ -45,7 +43,7 @@ function build(list, className) {
 
             document.querySelector(`[class="${className}"]`).querySelector('.item').parentNode.insertBefore(createdEls.div1, document.querySelector(`[class="${className}"]`).querySelector('.item').nextSibling);
 
-            createdEls.textarea1.value = textarea[i];
+            createdEls.textarea1.value = textarea[i].replace(/\\/gi, "");
             createdEls.button1.textContent = "Cs";
 
             createdEls.textarea1.onkeydown = newLine;
@@ -59,6 +57,10 @@ function build(list, className) {
         }
     }
     document.querySelector(`[class="${className}"]`).querySelector('.item').remove();
+    if(settings){
+        document.getElementById('regex').checked = settings.regex
+        document.getElementById('completeWords').checked = settings.wholeWords
+    }
 }
 
 function createElements(...arrays) {

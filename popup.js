@@ -93,7 +93,7 @@ function newLine(e) {
 
 function startHighlight(e) {
     let query;
-    if (localStorage.getItem('isRegex') === "false") {
+    if (document.getElementById('regex').checked === false) {
         query = e.path[0].value.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'); // -bobince & fregante : https://stackoverflow.com/questions/3561493/is-there-a-regexp-escape-function-in-javascript
     } else {
         query = e.path[0].value;
@@ -101,8 +101,9 @@ function startHighlight(e) {
     let bkrColor = e.path[1].querySelector('[name="bkgrColor"]').value;
     let color = e.path[1].querySelector('[name="color"]').value;
     let flags = e.path[1].querySelector('[class^="flag"]').className;
+    let isWholeWords = document.getElementById('completeWords').checked;
     let id = e.path[0].id;
-    chrome.runtime.sendMessage({ command: { query: [query, bkrColor, color, flags, id] } })
+    chrome.runtime.sendMessage({ command: { query: [query, bkrColor, color, flags, isWholeWords, id] } })
 };
 
 function toggleFlag(e) {
@@ -281,3 +282,21 @@ document.getElementById('settings').onclick = e => {
     document.querySelector('.container').style.display = "none";
     document.querySelector('.footer').style.display = "none";
 }
+
+document.getElementById('regex').onclick = e => {
+    saveSettings();
+};
+
+// if(localStorage.getItem('isRegex')==="true"){
+//     document.getElementById('regex').checked = true;
+// };
+
+
+document.getElementById('completeWords').onclick = e => {
+    saveSettings();
+};
+
+// if(localStorage.getItem('wholeWords')==="false"){
+//     document.getElementById('completeWords').checked = false;
+// };
+// console.log(localStorage.getItem('wholeWords'))

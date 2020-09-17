@@ -32,12 +32,6 @@ if (!localStorage.getItem('wholeWords')) {
 // }
 let queriesArr = {};
 let domain;
-let isRegex;
-if (localStorage.getItem('isRegex') === 'false') {
-    isRegex = false;
-} else {
-    isRegex = true;
-}
 
 function store(e) {
 
@@ -45,7 +39,6 @@ function store(e) {
     indication.style.visibility = "visible";
     let lists = document.querySelectorAll('[name^="list"]');
     lists.forEach(list => {
-        let domain = list.className
 
         queriesArr[list.className] = {};
         let queries = {};
@@ -59,7 +52,7 @@ function store(e) {
 
         items.forEach(item => {
             let pattern
-            if (isRegex === false) {
+            if (document.getElementById('regex').checked === false) {
                 pattern = item.querySelector('.textarea').value.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');  // -bobince & fregante : https://stackoverflow.com/questions/3561493/is-there-a-regexp-escape-function-in-javascript
             } else {
                 pattern = item.querySelector('.textarea').value
@@ -69,7 +62,7 @@ function store(e) {
             let color = item.querySelector('[name="color"]').value;
             let id = item.querySelector('.textarea').id;
             if (flag.className === 'flag-on') { flag = 'gi' } else { flag = 'g' };
-            queries[pattern] = new QueryLine(pattern, bkrColor, color, flag, true, document.body, id);
+            queries[pattern] = new QueryLine(pattern, bkrColor, color, flag, document.getElementById('completeWords').checked, document.body, id);
 
             patternArr.push(pattern);
             flagArr.push(flag);
@@ -80,12 +73,26 @@ function store(e) {
 
         queriesArr[list.className]['queryInfo'] = [patternArr, flagArr, bkrColorArr, colorArr, idArr];
         queriesArr[list.className]['queries'] = queries;
-        chrome.storage.local.set(queriesArr, function () {
-            indication.style.visibility = "hidden";
-            // chrome.runtime.sendMessage({ command: 'initialize' })
-        });
+
+    })
+    chrome.storage.local.set(queriesArr, function () {
+        indication.style.visibility = "hidden";
+        // chrome.runtime.sendMessage({ command: 'initialize' })
+    });
+
+    chrome.storage.local.get(['globalList', lists[1].className, 'settings'], function (result) {
+        console.log(result)
     })
 };
+
+function saveSettings(){
+    let isRegex = document.getElementById('regex').checked;
+    let isWholeWords = document.getElementById('completeWords').checked;
+    let settings = {regex: isRegex, wholeWords: isWholeWords}
+    chrome.storage.local.set({settings: settings}, function () {
+        console.log(settings)
+    });
+}
 
 let lists = {
     queriesArr,

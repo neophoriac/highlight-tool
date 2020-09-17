@@ -7,13 +7,7 @@ let flags = [];
 let onlyWords = [];
 let id = [];
 
-if(!localStorage.getItem('isRegex')){
-    localStorage.setItem('isRegex', 'false');
-};
-
-if(!localStorage.getItem('wholeWords')){
-    localStorage.setItem('wholeWords', 'true');
-};
+let isWholeWords = true;
 
 function highlightText_2(stringArr, bkrColor = 'yellow', color = '#000', flags = 'ig', onlyWords = true, root = document.body, id) {
     console.time(`query_${stringArr}`);
@@ -69,6 +63,7 @@ function highlightText_2(stringArr, bkrColor = 'yellow', color = '#000', flags =
                     span.className = 'hltd_text';
                     span.id = id[i];
                     range.insertNode(span); // insert node where our current range is
+
                 }
             }
         }
@@ -191,7 +186,7 @@ chrome.runtime.onMessage.addListener(
     });
 
 function initialize() {
-    chrome.storage.local.get(['globalList', location.host], function (result) {
+    chrome.storage.local.get(['globalList', location.host, 'settings'], function (result) {
         if (!result.globalList) { return }
         let Completedlist = result.globalList.queries;
         let domainList
@@ -229,13 +224,12 @@ function initialize() {
 
 function initializeSingle(query) {
     if (query[3] === 'flag-on') { query[3] = 'gi' } else { query[3] = 'g' };
-
     pattern.push(query[0]);
     bkrColor.push(query[1]);
     color.push(query[2]);
     flags.push(query[3]);
-    onlyWords.push(true);
-    id.push(query[4]);
+    onlyWords.push(query[4]);
+    id.push(query[5]);
 
     highlightText_2(pattern, bkrColor, color, flags, onlyWords, document.body, id)
 }
@@ -246,9 +240,9 @@ function changeColor(info) {
     let queryId = info.queryId;
     let instances = document.querySelectorAll(`[id="${queryId}"]`)
     if (colorType === 'bkgrColor') {
-        instances.forEach(instance => { instance.style.backgroundColor = info.color })
+        instances.forEach(instance => { instance.style.backgroundColor = color })
     } else {
-        instances.forEach(instance => { instance.style.color = info.color })
+        instances.forEach(instance => { instance.style.color = color })
     }
 }
 
