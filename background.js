@@ -5,24 +5,33 @@ chrome.runtime.onMessage.addListener(
                 chrome.tabs.sendMessage(tabs[0].id, { command: 'initialize' });
             });
         };
-        if(request.command.id){
+        if (request.command.id) {
             chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
                 chrome.tabs.sendMessage(tabs[0].id, { command: request.command });
             });
         }
-        if(request.command.query){
+        if (request.command.query) {
+            chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+                if (tabs[0]) {
+                    chrome.tabs.sendMessage(tabs[0].id, { command: request.command });
+                }
+            });
+        }
+        if (request.command.changeColor) {
             chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
                 chrome.tabs.sendMessage(tabs[0].id, { command: request.command });
             });
         }
-        if(request.command.changeColor){
+        if (request.command.toggle) {
             chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-                chrome.tabs.sendMessage(tabs[0].id, { command: request.command });
+                if (tabs[0]) {
+                    chrome.tabs.sendMessage(tabs[0].id, { command: request.command });
+                }
             });
         }
-        if(request.command === "getLocation"){
+        if (request.command === "getLocation") {
             chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-                sendResponse({host: (new URL(tabs[0].url)).host})
+                sendResponse({ host: (new URL(tabs[0].url)).host })
             });
         }
         return true;

@@ -1,6 +1,6 @@
 @font-face {
-    font-family: "Mukta";
-    src: url('/fonts/Mukta-SemiBold.ttf');
+    font-family: "Baloo Tammudu 2";
+    src: url('/fonts/BalooTammudu2-ExtraBold.ttf');
 }
 
 body {
@@ -31,7 +31,7 @@ body {
     font-size: 11px;
     padding: 0px 2px;
     outline: none;
-    background-color: #1a73e8;
+    background-color:#e81a70;
     border: 1px solid #dadce0;
     margin: 2px 5px 2px 5px;
     color: white;
@@ -60,6 +60,7 @@ body {
     overflow: auto;
     border: 1px solid #c6c3d6;
     max-height: 510px;
+    border-radius: 4px;
 }
 
 #list {
@@ -71,10 +72,10 @@ body {
 }
 
 #title {
-    font-family: Mukta;
+    font-family: Baloo Tammudu 2;
     font-size: 20px;
-    color: #1a73e8;
-    margin: 0px 0px 3px 0px;
+    color: #e81a70;
+    margin: -8px 0px 3px 0px;
 }
 
 .button-below {
@@ -82,27 +83,21 @@ body {
     outline: none;
     border: 1px solid #dadce0;
     border-radius: 4px;
-    color: #1a73e8;
+    color: #e81a70;
     margin-top: 5px;
     font-weight: 500;
     font-family: Roboto, 'Segoe UI', Tahoma, sans-serif;
     line-height: 20.02px;
-    height: 32px;
     cursor: pointer;
     position: absolute;
     left: 35%;
     width: 106px;
-    margin-top: 15px;
+    margin-top: 10px;
 }
 
 .button-below:hover {
-    background-color: #1a73e8;
+    background-color:#e81a70;
     color:white;
-}
-
-#saving-svg {
-    width: 32px;
-    margin-top: -8px;
 }
 
 .header {
@@ -112,17 +107,20 @@ body {
 
 #saving {
     visibility: hidden;
+    margin-left: 38px;
+    margin-top: -3px;
+    font-weight: 900;
 }
 
 #settings {
     width: 22px;
     float: right;
     cursor: pointer;
-    margin-top: 6%;
+    margin-top: 11px;
 }
 
 #clear {
-    margin-top:5%;
+    margin-top:5px;
     display: inline-flex;
     position: relative;
     top: 3px;
@@ -136,11 +134,11 @@ body {
 }
 
 #clear:hover {
-    border: 1px solid #1a73e8;
+    background-color: #f8f8f8;
 }
 
 .footer {
-    height: 56px;
+    height: 37px;
 }
 
 .groupColors {
@@ -158,4 +156,84 @@ body {
     padding: 0px 2px;
     padding-bottom: 3px;
     margin-top: 10px;
+    max-height: 387px;
+    border-radius: 4px;
+    overflow: auto;
 }
+
+::-webkit-scrollbar {
+    width:3px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #e81a70; 
+    border-radius:5px;
+}
+
+#clearAll {
+    background-color: white;
+    outline: none;
+    border: 1px solid #dadce0;
+    border-radius: 4px;
+    color: #e81a70;
+    font-weight: 500;
+    font-family: Roboto, 'Segoe UI', Tahoma, sans-serif;
+    line-height: 20.02px;
+    cursor: pointer;
+}
+
+#clearAll:hover {
+    background-color:#e81a70;
+    color:white;
+}
+
+.toggle-control {
+    display: block;
+    position: relative;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+  }
+  .toggle-control input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+  .toggle-control input:checked ~ .control {
+    background-color: #ff7cb3ea;
+  }
+  .toggle-control input:checked ~ .control:after {
+    left: 17px;
+  }
+  .toggle-control .control {
+    position: absolute;
+    top: 0;
+    left: -30px;
+    height: 13px;
+    width: 29px;
+    border-radius: 25px;
+    background-color: darkgray;
+    -webkit-transition: background-color 0.15s ease-in;
+    transition: background-color 0.15s ease-in;
+  }
+  .toggle-control .control:after {
+    content: "";
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    width: 9px;
+    height: 9px;
+    border-radius: 25px;
+    background: #e81a70;
+    transform: scale(1.8);
+    -webkit-transition: left 0.15s ease-in;
+    transition: left 0.15s ease-in;
+  }
+
+  

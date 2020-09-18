@@ -156,7 +156,7 @@ function getColor() {
 
 let bTextarea = document.querySelectorAll('.blacklist-item');
 
-bTextarea.forEach(item=>{
+bTextarea.forEach(item => {
     item.onkeydown = newBlacklistLine;
 })
 
@@ -190,16 +190,23 @@ function colorPicked(e) {
 document.getElementById('clear').onclick = (e) => {
     let items = document.querySelectorAll('.item');
     if (isChecked === false) {
-        let lists = document.getElementsByName('list')
+        let lists = document.getElementsByName('list');
         lists.forEach(list => {
-            items = list.querySelectorAll('.item');
-            for (i = 1; i < items.length; i++) {
-                items[i].remove();
+            if (window.getComputedStyle(list).display !== "none") {
+                lists = list;
             }
-            items[0].children[1].value = '';
-            chrome.runtime.sendMessage({ command: { message: 'delete', id: ['.hltd_text', 'all'] } });
-            chrome.storage.local.clear()
         })
+        items = lists.querySelectorAll('.item');
+        for (i = 1; i < items.length; i++) {
+            items[i].remove();
+        }
+        items[0].children[1].value = '';
+        for (i = 0; i < items.length; i++) {
+
+            chrome.runtime.sendMessage({ command: { message: 'delete', id: [`[id="${items[i].querySelector('textarea').id}"]`, items[i].querySelector('textarea').id] } });
+
+        }
+
     } else {
         let checkboxes = document.querySelectorAll('[id^="chkbx"]');
         let arr = [];
@@ -215,14 +222,15 @@ document.getElementById('clear').onclick = (e) => {
             }
             document.querySelector('.trash').src = "images/trash-alt-solid.svg";
             document.querySelector('.groupColors').style.display = "none";
+            isChecked = false;
         })
     }
     store(e);
 }
 
-document.getElementById('this-domain').onclick =toggle;
+document.getElementById('this-domain').onclick = toggle;
 
-function toggle(e){
+function toggle(e) {
     let globalList = document.getElementById('list');
     let domainList = document.getElementById('domain');
 
@@ -237,10 +245,9 @@ function toggle(e){
     };
 };
 
-let domainList = document.getElementById('domain')
+let domainList = document.getElementById('domain');
 chrome.runtime.sendMessage({ command: "getLocation" }, function (response) {
     domainList.className = response.host;
-    // domainList.firstElementChild.querySelector('textarea').className = 
 });
 
 function enableOptions(e) {
@@ -283,6 +290,25 @@ function changeGroupColor(value, name) {
     store();
 };
 
+
+let clearAll = document.getElementById('clearAll');
+
+clearAll.onclick = e => {
+
+    let lists = document.getElementsByName('list');
+    lists.forEach(list => {
+
+        items = list.querySelectorAll('.item');
+        for (i = 1; i < items.length; i++) {
+            items[i].remove();
+        }
+        items[0].children[1].value = '';
+        chrome.runtime.sendMessage({ command: { message: 'delete', id: ['.hltd_text', 'all'] } });
+        chrome.storage.local.clear();
+    })
+    clearAll.textContent = "Done";
+}
+
 document.getElementById('settings').onclick = e => {
     let footerBtn = document.getElementById('this-domain');
     let curList = footerBtn.textContent;
@@ -293,8 +319,8 @@ document.getElementById('settings').onclick = e => {
     footerBtn.textContent = "Save";
     footerBtn.id = "save";
 
-    document.getElementById('save').onclick = e =>{
-        saveSettings(); 
+    document.getElementById('save').onclick = e => {
+        saveSettings();
 
         document.querySelector('.container').style.display = "";
         document.getElementById('clear').style.display = "";
@@ -303,5 +329,19 @@ document.getElementById('settings').onclick = e => {
         footerBtn.id = "this-domain";
         footerBtn.textContent = curList;
         footerBtn.onclick = toggle;
+        clearAll.textContent = "Clear";
     };
 };
+
+let toggleOnOff = document.getElementById('toggleOnOff');
+toggleOnOff.onclick = e => {
+    chrome.storage.local.set({ toggle: [toggleOnOff.checked] }, function () {
+        chrome.runtime.sendMessage({ command: { toggle: [toggleOnOff.checked] } });
+    })
+}
+
+chrome.storage.local.get('toggle', function (result) {
+    if (result.toggle) {
+        toggleOnOff.checked = result.toggle[0];
+    };
+});

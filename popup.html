@@ -10,12 +10,14 @@
 
 <body>
     <div class="header">
-        <h3 id="title">Highlight Tool</h3>
+        <h3 id="title">Highlight Magic</h3>
         <div style="display: flex" id="saving">
-            <span style="color: white; margin-right: 4px">Saving..</span>
-            <img id="saving-svg" src="images/Pulse-1.3s-200px.svg" alt="saving">
+            <span style="color: black; margin-right: 4px">Saving..</span>
         </div>
-    </div>
+        <label class="toggle-control">
+            <input type="checkbox" checked="checked" id="toggleOnOff">
+            <span class="control"></span>
+          </label>    </div>
     <div class="container">
         <div class="wrap">
             <div id="list" name="list" class="globalList">
@@ -40,27 +42,31 @@
         </div>
     </div>
     <div id="settings-page">
-        <label for="regex">Allow Regular Expression Tokens:</label>
-        <input type="checkbox" id="regex"><br>
-        <label for="completeWords">Match Whole Words:</label>
-        <input type="checkbox" id="completeWords" checked style="margin-bottom: 15px;"><br>
-        <label for="blacklist"><b>Blacklist Sites:</b></label>
-        <div id="blacklist" contenteditable="true"></div>
-    </div>
-    <div class="footer">
-        <div id="clear">
-            <img class="trash" style="width: 13px" src="images/trash-alt-solid.svg" alt="">
+        <div style="border: 1px solid #c6c3d6; border-radius: 4px; padding: 5px; margin-bottom: 15px;">
+            <label for="regex">Allow Regular Expression Tokens:</label>
+            <input type="checkbox" id="regex"><br>
+            <label for="completeWords">Match Whole Words:</label>
+            <input type="checkbox" id="completeWords" checked><br>
+            <label for="clearAll">Clear Every List Stored: </label>
+            <button id="clearAll"">Clear</button><br>
         </div>
-        <div class="groupColors">
-            <input type="color" name="groupBkgrColor" class="color" value="#FFFF00">
-            <input type="color" name="groupColor" class="color" value="#000000">
+        <label for=" blacklist"><b>Blacklisted Sites & Pages:</b></label>
+                <div id="blacklist" contenteditable="true"></div>
         </div>
-        <button id="this-domain" class="button-below">This Site's List</button>
-        <img id="settings" src="images/icons8-settings.svg" alt="">
-    </div>
-    <script src="popup.js"></script>
-    <script src="popup_compile.js"></script>
-    <script src="popup_rebuild.js"></script>
+        <div class="footer">
+            <div id="clear">
+                <img class="trash" style="width: 13px" src="images/trash-alt-solid.svg" alt="">
+            </div>
+            <div class="groupColors">
+                <input type="color" name="groupBkgrColor" class="color" value="#FFFF00">
+                <input type="color" name="groupColor" class="color" value="#000000">
+            </div>
+            <button id="this-domain" class="button-below">This Site's List</button>
+            <img id="settings" src="images/cog-solid.svg" alt="">
+        </div>
+        <script src="popup.js"></script>
+        <script src="popup_compile.js"></script>
+        <script src="popup_rebuild.js"></script>
 </body>
 
 </html>

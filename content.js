@@ -100,7 +100,9 @@ function removeHighlight(selector) {
     console.timeEnd('remove');
 }
 
-window.onload = function () {
+window.onload = prepareAndStart;
+ 
+function prepareAndStart() {
     chrome.storage.local.get(['settings'], function (result) { // get stored settings
         if (result.settings) { //if setings exists
             let items = result.settings.blacklistItems; // array with blacklisted pages
@@ -149,10 +151,15 @@ chrome.runtime.onMessage.addListener(
         if (request.command.changeColor) {
             changeColor(request.command.changeColor);
         };
+        if (request.command.toggle) {
+            turnOnOff(request.command.toggle)
+        }
     });
 
 function initialize() {
-    chrome.storage.local.get(['globalList', location.host, 'settings'], function (result) {
+    chrome.storage.local.get(['globalList', location.host, 'settings', 'toggle'], function (result) {
+
+        if (result.toggle && !result.toggle[0]) { return };
         if (!result.globalList) { return }
         let Completedlist = result.globalList.queries;
         let domainList
@@ -189,8 +196,9 @@ function initialize() {
 }
 
 function initializeSingle(query) {
-    chrome.storage.local.get(['settings'], function (result) { // get stored settings
+    chrome.storage.local.get(['settings', 'toggle'], function (result) { // get stored settings
 
+        if (result.toggle && !result.toggle[0]) { return };
         if (result.settings) { //if setings exists
 
             let items = result.settings.blacklistItems; // array with blacklisted pages
@@ -205,7 +213,7 @@ function initializeSingle(query) {
 
             if (!checkBlacklist()) { // if page is not blacklisted
                 send(); //highlight
-            }
+            };
 
         } else { // if settings are not found
             send(); // highlight
@@ -257,4 +265,16 @@ function spliceArrs(result) {
         onlyWords = [];
         id = [];
     }
+}
+
+function turnOnOff(value) {
+    value = value[0];
+
+    if (value) {
+        prepareAndStart();
+    } else {
+        removeHighlight(document.querySelectorAll('.hltd_text'));
+        observer.disconnect();
+    };
+
 }

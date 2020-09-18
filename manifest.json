@@ -1,10 +1,10 @@
 {
     "manifest_version": 2,
-    "name": "Highlight Tool",
+    "name": "Highlight Magic",
     "description": "Enables user to highlight words",
-    "version": "0.5",
+    "version": "0.0.1",
     "browser_action": {
-        "default_title": "Highlight tool",
+        "default_title": "Highlight Magic",
         "default_popup": "popup.html"
     },
     "permissions": [
