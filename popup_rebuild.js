@@ -58,8 +58,10 @@ function build(list, className, settings) {
     }
     document.querySelector(`[class="${className}"]`).querySelector('.item').remove();
     if(settings){
-        document.getElementById('regex').checked = settings.regex
-        document.getElementById('completeWords').checked = settings.wholeWords
+        document.getElementById('regex').checked = settings.regex;
+        document.getElementById('completeWords').checked = settings.wholeWords;
+        document.getElementById('blacklist').innerText = settings.blacklist;
+        console.log(settings)
     }
 }
 

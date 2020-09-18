@@ -74,7 +74,7 @@ function store(e) {
         queriesArr[list.className]['queryInfo'] = [patternArr, flagArr, bkrColorArr, colorArr, idArr];
         queriesArr[list.className]['queries'] = queries;
 
-    })
+    });
     chrome.storage.local.set(queriesArr, function () {
         indication.style.visibility = "hidden";
         // chrome.runtime.sendMessage({ command: 'initialize' })
@@ -88,7 +88,10 @@ function store(e) {
 function saveSettings(){
     let isRegex = document.getElementById('regex').checked;
     let isWholeWords = document.getElementById('completeWords').checked;
-    let settings = {regex: isRegex, wholeWords: isWholeWords}
+    let blacklist = document.getElementById('blacklist')
+    let blacklistItems = document.getElementById('blacklist').innerText.split('\n');
+
+    let settings = {regex: isRegex, wholeWords: isWholeWords, blacklist: blacklist.innerText, blacklistItems: blacklistItems}
     chrome.storage.local.set({settings: settings}, function () {
         console.log(settings)
     });

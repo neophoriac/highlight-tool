@@ -39,6 +39,14 @@
             </div>
         </div>
     </div>
+    <div id="settings-page">
+        <label for="regex">Allow Regular Expression Tokens:</label>
+        <input type="checkbox" id="regex"><br>
+        <label for="completeWords">Match Whole Words:</label>
+        <input type="checkbox" id="completeWords" checked style="margin-bottom: 15px;"><br>
+        <label for="blacklist"><b>Blacklist Sites:</b></label>
+        <div id="blacklist" contenteditable="true"></div>
+    </div>
     <div class="footer">
         <div id="clear">
             <img class="trash" style="width: 13px" src="images/trash-alt-solid.svg" alt="">
@@ -49,15 +57,6 @@
         </div>
         <button id="this-domain" class="button-below">This Site's List</button>
         <img id="settings" src="images/icons8-settings.svg" alt="">
-    </div>
-    <div id="settings-page">
-        <label for="regex">Allow Regular Expression Tokens:</label>
-        <input type="checkbox" id="regex"><br>
-        <label for="completeWords">Match Whole Words:</label>
-        <input type="checkbox" id="completeWords" checked><br>
-        <label for="blacklist"><b>Blacklist Sites</b></label>
-        <div id="blacklist">
-            <textarea name="textarea" class="blacklist-item" maxlength="30" cols="30"></textarea> </div>
     </div>
     <script src="popup.js"></script>
     <script src="popup_compile.js"></script>

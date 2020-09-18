@@ -6,8 +6,7 @@ let list = document.getElementById('list');
 
 for (i = 0; i < textarea.length; i++) {
     textarea[i].onkeydown = newLine;
-    textarea[i].onkeyup = startHighlight;
-}
+};
 
 function newLine(e) {
 
@@ -20,7 +19,7 @@ function newLine(e) {
 
         if (e.path[0].value !== '') {
             let caretPos = e.path[0].selectionStart;
-            let transferText = e.path[0].value.substr(caretPos)
+            let transferText = e.path[0].value.substr(caretPos);
             e.path[0].value = e.path[0].value.substr(0, caretPos);
 
             let colorsArr = getColor();
@@ -43,13 +42,12 @@ function newLine(e) {
 
             els.textarea1.onkeydown = newLine;
             els.input1.onclick = enableOptions;
-            // els.textarea1.onkeyup = startHighlight;
             els.button1.onclick = toggleFlag;
             els.input2.onchange = colorPicked;
             els.input3.onchange = colorPicked;
             els.textarea1.focus();
-        }
-    }
+        };
+    };
 
     if (e.keyCode === 8 && e.path[0].selectionStart === 0 && e.path[1].previousElementSibling && window.getSelection().toString() === "") {
         e.preventDefault();
@@ -68,11 +66,11 @@ function newLine(e) {
         // chrome.runtime.sendMessage({ command: { query: [query, bkrColor, color, flags, id] } });
 
         store(e);
-    }
+    };
 
     if (e.keyCode === 8) {
-        chrome.runtime.sendMessage({ command: { message: 'delete', id: [`[id="${e.target.id}"]`, e.target.id] } })
-    }
+        chrome.runtime.sendMessage({ command: { message: 'delete', id: [`[id="${e.target.id}"]`, e.target.id] } });
+    };
 
     if (e.keyCode === 38 && e.path[1].previousElementSibling) {
         e.preventDefault();
@@ -80,7 +78,7 @@ function newLine(e) {
         let previousEl = e.path[1].previousElementSibling.children[1];
         previousEl.focus();
         previousEl.setSelectionRange(caretPos, caretPos);
-    }
+    };
 
     if (e.keyCode === 40 && e.path[1].nextElementSibling) {
         e.preventDefault();
@@ -88,8 +86,8 @@ function newLine(e) {
         let nextEl = e.path[1].nextElementSibling.children[1];
         nextEl.focus();
         nextEl.setSelectionRange(caretPos, caretPos);
-    }
-}
+    };
+};
 
 function startHighlight(e) {
     let query;
@@ -112,15 +110,15 @@ function toggleFlag(e) {
         e.path[0].className = 'flag-on';
     } else {
         e.path[0].className = 'flag-off';
-    }
+    };
     store(e);
-}
+};
 
 function setAttributes(el, attributes) {
     for (const key in attributes) {
-        el.setAttribute(key, attributes[key])
-    }
-}
+        el.setAttribute(key, attributes[key]);
+    };
+};
 
 function getColor() {
     let rgb = [Math.floor(Math.random() * 256), Math.floor(Math.random() * 256), Math.floor(Math.random() * 256)]; // get random RGB colors
@@ -142,7 +140,7 @@ function getColor() {
             if (arr[i] === 14) { arr[i] = "e" };
             if (arr[i] === 15) { arr[i] = "f" };
         };
-        if (arr.length === 1) { arr[0] = '0' + arr[0] } // if result is a single character or digit add 0 in front
+        if (arr.length === 1) { arr[0] = '0' + arr[0] }; // if result is a single character or digit add 0 in front
         if (rgb[j] === 0) { arr.push('00') }; // if random rgb color was 0 then array will be empty, so push 00 to array as it is appropriate
         hexColor.push(arr.join('')); // join array values to get hex color
     };
@@ -155,6 +153,12 @@ function getColor() {
 
     return [hexColor, color, rgb, Y]; // return all info in an array
 };
+
+let bTextarea = document.querySelectorAll('.blacklist-item');
+
+bTextarea.forEach(item=>{
+    item.onkeydown = newBlacklistLine;
+})
 
 let flagButtons = document.getElementsByName('button');
 
@@ -216,20 +220,22 @@ document.getElementById('clear').onclick = (e) => {
     store(e);
 }
 
-document.getElementById('this-domain').onclick = (e) => {
+document.getElementById('this-domain').onclick =toggle;
+
+function toggle(e){
     let globalList = document.getElementById('list');
     let domainList = document.getElementById('domain');
 
     if (globalList.style.display === "none") {
         domainList.style.display = "none";
-        globalList.style.display = ""
-        e.target.textContent = "This Site's List"
+        globalList.style.display = "";
+        e.target.textContent = "This Site's List";
     } else {
-        globalList.style.display = "none"
+        globalList.style.display = "none";
         domainList.style.display = "";
-        e.target.textContent = "Global List"
-    }
-}
+        e.target.textContent = "Global List";
+    };
+};
 
 let domainList = document.getElementById('domain')
 chrome.runtime.sendMessage({ command: "getLocation" }, function (response) {
@@ -278,25 +284,24 @@ function changeGroupColor(value, name) {
 };
 
 document.getElementById('settings').onclick = e => {
+    let footerBtn = document.getElementById('this-domain');
+    let curList = footerBtn.textContent;
     document.getElementById('settings-page').style.display = "inline";
     document.querySelector('.container').style.display = "none";
-    document.querySelector('.footer').style.display = "none";
-}
+    document.getElementById('clear').style.display = "none";
+    document.getElementById('settings').style.display = "none";
+    footerBtn.textContent = "Save";
+    footerBtn.id = "save";
 
-document.getElementById('regex').onclick = e => {
-    saveSettings();
+    document.getElementById('save').onclick = e =>{
+        saveSettings(); 
+
+        document.querySelector('.container').style.display = "";
+        document.getElementById('clear').style.display = "";
+        document.getElementById('settings').style.display = "";
+        document.getElementById('settings-page').style.display = "none";
+        footerBtn.id = "this-domain";
+        footerBtn.textContent = curList;
+        footerBtn.onclick = toggle;
+    };
 };
-
-// if(localStorage.getItem('isRegex')==="true"){
-//     document.getElementById('regex').checked = true;
-// };
-
-
-document.getElementById('completeWords').onclick = e => {
-    saveSettings();
-};
-
-// if(localStorage.getItem('wholeWords')==="false"){
-//     document.getElementById('completeWords').checked = false;
-// };
-// console.log(localStorage.getItem('wholeWords'))

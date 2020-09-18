@@ -81,12 +81,6 @@ const observer = new MutationObserver(function (mutations) {
     mutations.forEach(mutation => {
         mutation.addedNodes.forEach(addedNode => {
             highlightText_2(pattern, bkrColor, color, flags, onlyWords, addedNode, id)
-
-            //             addedNode.childNodes.forEach(childNode=>{
-            //                 if(childNode.nodeName === '#text'){
-            // //                     observer.disconnect();
-            //                 }
-            //             })
         })
     })
 })
@@ -106,45 +100,27 @@ function removeHighlight(selector) {
     console.timeEnd('remove');
 }
 
-// textarea.onkeydown = function (e) {
-
-//     if (e.keyCode === 13) {
-//         e.preventDefault();
-//         textarea.value = textarea.value.trim();
-//         if (textarea.value === '') {
-//             removeHighlight()
-//             return
-//         }
-
-//         queries = textarea.value.split(' ');
-//         queries.sort(function (a, b) {
-//             if (a.length > b.length) {
-//                 return -1
-//             } else if (a.length < b.length) {
-//                 return 1
-//             }
-//             return 0
-//         });
-//         queries = [...new Set(queries)];
-
-//         let queriesArr = {};
-
-//         queries.forEach(function (query) {
-//             let h = Math.floor(Math.random() * 360)
-//             let color;
-//             if (h < 272 && h > 233) { color = '#fff' } else { color = '#000' }
-//             queriesArr[query] = new Query(query, `hsl(${h},100%,75%)`, color, 'gi', true, document.body);
-//         })
-//         console.log(queriesArr)
-//     }
-//     textarea.focus();
-// }
-
-
 window.onload = function () {
-    initialize();
-}
+    chrome.storage.local.get(['settings'], function (result) { // get stored settings
+        if (result.settings) { //if setings exists
+            let items = result.settings.blacklistItems; // array with blacklisted pages
+            function checkBlacklist() {
+                for (i = 0; i < items.length; i++) { // for each value in array
+                    if (location.href.search(items[i].replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')) >= 0 && items[i] !== '') { // check if current page is blacklisted
+                        return true; // return true if it is
+                    };
+                }
+                return false; // return false if it's not
+            };
 
+            if (!checkBlacklist()) { // if page is not blacklisted
+                initialize(); // highlight
+            }
+        } else { // if settings are not found
+            initialize(); // highlight
+        }
+    })
+}
 
 class Query {
     constructor(pattern, bkrColor, color, flags, onlyWords, root) {
@@ -157,16 +133,6 @@ class Query {
 
     }
 }
-
-
-
-// if (!document.getElementById(`\\b${query}\\b`) && !document.getElementById(query)) {
-//     setTimeout(() => {
-
-//         highlightText_2(query, `hsl(${h},100%,75%)`, `${color}`);
-
-// storage object-> lists object-> queries object -> query objects
-
 
 chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
@@ -223,39 +189,65 @@ function initialize() {
 }
 
 function initializeSingle(query) {
-    if (query[3] === 'flag-on') { query[3] = 'gi' } else { query[3] = 'g' };
-    pattern.push(query[0]);
-    bkrColor.push(query[1]);
-    color.push(query[2]);
-    flags.push(query[3]);
-    onlyWords.push(query[4]);
-    id.push(query[5]);
+    chrome.storage.local.get(['settings'], function (result) { // get stored settings
 
-    highlightText_2(pattern, bkrColor, color, flags, onlyWords, document.body, id)
+        if (result.settings) { //if setings exists
+
+            let items = result.settings.blacklistItems; // array with blacklisted pages
+            function checkBlacklist() {
+                for (i = 0; i < items.length; i++) { // for each value in array
+                    if (location.href.search(items[i].replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')) >= 0 && items[i] !== '') { // check if current page is blacklisted
+                        return true; // return true if it is
+                    };
+                }
+                return false; // return false if it's not
+            };
+
+            if (!checkBlacklist()) { // if page is not blacklisted
+                send(); //highlight
+            }
+
+        } else { // if settings are not found
+            send(); // highlight
+        }
+    })
+
+    function send() {
+        if (query[3] === 'flag-on') { query[3] = 'gi' } else { query[3] = 'g' };
+        pattern.push(query[0]);
+        bkrColor.push(query[1]);
+        color.push(query[2]);
+        flags.push(query[3]);
+        onlyWords.push(query[4]);
+        id.push(query[5]);
+
+        highlightText_2(pattern, bkrColor, color, flags, onlyWords, document.body, id);
+    }
+
 }
 
 function changeColor(info) {
     let color = info.color;
     let colorType = info.colorType;
     let queryId = info.queryId;
-    let instances = document.querySelectorAll(`[id="${queryId}"]`)
+    let instances = document.querySelectorAll(`[id="${queryId}"]`);
     if (colorType === 'bkgrColor') {
-        instances.forEach(instance => { instance.style.backgroundColor = color })
+        instances.forEach(instance => { instance.style.backgroundColor = color });
     } else {
-        instances.forEach(instance => { instance.style.color = color })
-    }
-}
+        instances.forEach(instance => { instance.style.color = color });
+    };
+};
 
 function spliceArrs(result) {
     if (result !== "all") {
         let index = id.indexOf(result)
         if (index !== -1) {
-            pattern.splice(index, 1)
-            bkrColor.splice(index, 1)
-            color.splice(index, 1)
-            flags.splice(index, 1)
-            onlyWords.splice(index, 1)
-            id.splice(index, 1)
+            pattern.splice(index, 1);
+            bkrColor.splice(index, 1);
+            color.splice(index, 1);
+            flags.splice(index, 1);
+            onlyWords.splice(index, 1);
+            id.splice(index, 1);
         }
     } else {
         pattern = [];
