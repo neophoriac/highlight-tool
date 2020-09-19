@@ -31,7 +31,7 @@ body {
     font-size: 11px;
     padding: 0px 2px;
     outline: none;
-    background-color:#e81a70;
+    background-color: #e81a70;
     border: 1px solid #dadce0;
     margin: 2px 5px 2px 5px;
     color: white;
@@ -96,8 +96,8 @@ body {
 }
 
 .button-below:hover {
-    background-color:#e81a70;
-    color:white;
+    background-color: #e81a70;
+    color: white;
 }
 
 .header {
@@ -107,7 +107,7 @@ body {
 
 #saving {
     visibility: hidden;
-    margin-left: 38px;
+    margin-left: -50px;
     margin-top: -3px;
     font-weight: 900;
 }
@@ -120,13 +120,13 @@ body {
 }
 
 #clear {
-    margin-top:5px;
+    margin-top: 5px;
     display: inline-flex;
     position: relative;
     top: 3px;
     justify-content: center;
     outline: none;
-    width:26px;
+    width: 26px;
     height: 24px;
     border-radius: 25px;
     border: 1px solid #dadce0;
@@ -162,12 +162,12 @@ body {
 }
 
 ::-webkit-scrollbar {
-    width:3px;
+    width: 3px;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #e81a70; 
-    border-radius:5px;
+    background: #e81a70;
+    border-radius: 5px;
 }
 
 #clearAll {
@@ -183,8 +183,19 @@ body {
 }
 
 #clearAll:hover {
-    background-color:#e81a70;
-    color:white;
+    background-color: #e81a70;
+    color: white;
+}
+
+#donate {
+    position: absolute;
+    right: 50px;
+    top: 6px;
+    text-decoration: none;
+}
+
+#donate:hover {
+    text-decoration: underline;
 }
 
 .toggle-control {
@@ -194,24 +205,28 @@ body {
     cursor: pointer;
     font-size: 22px;
     -webkit-user-select: none;
-       -moz-user-select: none;
-        -ms-user-select: none;
-            user-select: none;
-  }
-  .toggle-control input {
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.toggle-control input {
     position: absolute;
     opacity: 0;
     cursor: pointer;
     height: 0;
     width: 0;
-  }
-  .toggle-control input:checked ~ .control {
+}
+
+.toggle-control input:checked~.control {
     background-color: #ff7cb3ea;
-  }
-  .toggle-control input:checked ~ .control:after {
+}
+
+.toggle-control input:checked~.control:after {
     left: 17px;
-  }
-  .toggle-control .control {
+}
+
+.toggle-control .control {
     position: absolute;
     top: 0;
     left: -30px;
@@ -221,8 +236,9 @@ body {
     background-color: darkgray;
     -webkit-transition: background-color 0.15s ease-in;
     transition: background-color 0.15s ease-in;
-  }
-  .toggle-control .control:after {
+}
+
+.toggle-control .control:after {
     content: "";
     position: absolute;
     left: 2px;
@@ -234,6 +250,4 @@ body {
     transform: scale(1.8);
     -webkit-transition: left 0.15s ease-in;
     transition: left 0.15s ease-in;
-  }
-
-  
+}

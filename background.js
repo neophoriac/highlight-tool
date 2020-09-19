@@ -29,6 +29,9 @@ chrome.runtime.onMessage.addListener(
                 }
             });
         }
+        if (request.command === "donate") {
+            chrome.tabs.create({ url: 'https://paypal.me/neophoriac' });
+        }
         if (request.command === "getLocation") {
             chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
                 sendResponse({ host: (new URL(tabs[0].url)).host })

@@ -345,3 +345,8 @@ chrome.storage.local.get('toggle', function (result) {
         toggleOnOff.checked = result.toggle[0];
     };
 });
+
+document.getElementById('donate').onclick = e => {
+    chrome.runtime.sendMessage({ command: "donate" });
+
+}
