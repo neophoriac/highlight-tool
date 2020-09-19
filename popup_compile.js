@@ -1,4 +1,3 @@
-
 class QueryLine {
     constructor(pattern, bkrColor, color, flags, onlyWords, root, id) {
         this.pattern = pattern;
@@ -19,17 +18,6 @@ if (!localStorage.getItem('wholeWords')) {
     localStorage.setItem('wholeWords', 'true');
 }
 
-// chrome.storage.local.get(['queryItems'], function (result) {
-//     haw(result)
-// });
-
-// function haw(result) {
-//     if (result.queryItems) {
-//         queries = result.queryItems.queries;
-//         queryInfo = queriesArr['queryInfo'] = result.queryItems.queryInfo;
-//         console.log(queriesArr, queries)
-//     }
-// }
 let queriesArr = {};
 let domain;
 
@@ -77,12 +65,7 @@ function store(e) {
     });
     chrome.storage.local.set(queriesArr, function () {
         indication.style.visibility = "hidden";
-        // chrome.runtime.sendMessage({ command: 'initialize' })
     });
-
-    chrome.storage.local.get(['globalList', lists[1].className, 'settings'], function (result) {
-        console.log(result)
-    })
 };
 
 function saveSettings(){
@@ -92,9 +75,7 @@ function saveSettings(){
     let blacklistItems = document.getElementById('blacklist').innerText.split('\n');
 
     let settings = {regex: isRegex, wholeWords: isWholeWords, blacklist: blacklist.innerText, blacklistItems: blacklistItems}
-    chrome.storage.local.set({settings: settings}, function () {
-        console.log(settings)
-    });
+    chrome.storage.local.set({settings: settings});
 }
 
 let lists = {

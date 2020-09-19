@@ -1,4 +1,3 @@
-
 let host;
 
 chrome.runtime.sendMessage({ command: "getLocation" }, function (response) {
@@ -61,7 +60,6 @@ function build(list, className, settings) {
         document.getElementById('regex').checked = settings.regex;
         document.getElementById('completeWords').checked = settings.wholeWords;
         document.getElementById('blacklist').innerText = settings.blacklist;
-        console.log(settings)
     }
 }
 

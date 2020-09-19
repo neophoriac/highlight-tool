@@ -58,13 +58,6 @@ function newLine(e) {
         previousEl.focus();
         previousEl.setSelectionRange(pos, pos);
 
-        // let query = previousEl.value;
-        // let bkrColor = previousEl.parentElement.querySelector('[name="bkgrColor"]').value;
-        // let color = previousEl.parentElement.querySelector('[name="color"]').value;
-        // let flags =previousEl.parentElement.querySelector('[class^="flag"]').className;
-        // let id = previousEl.id;
-        // chrome.runtime.sendMessage({ command: { query: [query, bkrColor, color, flags, id] } });
-
         store(e);
     };
 

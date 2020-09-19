@@ -10,7 +10,6 @@ let id = [];
 let isWholeWords = true;
 
 function highlightText_2(stringArr, bkrColor = 'yellow', color = '#000', flags = 'ig', onlyWords = true, root = document.body, id) {
-    console.time(`query_${stringArr}`);
     observer.disconnect();
 
     if (typeof stringArr === "string") { stringArr = [stringArr] };
@@ -72,7 +71,6 @@ function highlightText_2(stringArr, bkrColor = 'yellow', color = '#000', flags =
 
     };
 
-    console.timeEnd(`query_${stringArr}`);
     observer.observe(document.body, { childList: true, subtree: true })
 }
 
@@ -88,7 +86,6 @@ const observer = new MutationObserver(function (mutations) {
 
 function removeHighlight(selector) {
     observer.disconnect();
-    console.time('remove')
     let hlts = selector
     hlts.forEach(function (hlt) {
         hlt.before(hlt.textContent)
@@ -97,7 +94,6 @@ function removeHighlight(selector) {
     document.normalize();
     observer.observe(document.body, { childList: true, subtree: true });
     queries = [];
-    console.timeEnd('remove');
 }
 
 window.onload = prepareAndStart;
@@ -167,11 +163,6 @@ function initialize() {
             domainList = result[location.host].queries;
             Object.assign(Completedlist, domainList);
         };
-
-        // let target = {};
-        // Object.keys(queryItems).forEach(key => {
-        //     Object.assign(target, queryItems[key]);
-        // })
 
         let list = {
             Completedlist,
