@@ -22,7 +22,7 @@ function highlightText_2(stringArr, bkrColor = 'yellow', color = '#000', flags =
         NodeFilter.SHOW_TEXT, // grab all the text nodes
         {
             acceptNode: function (node) { // additional filtering
-                if (node.parentNode.nodeName !== "STYLE" && node.parentNode.nodeName !== "SCRIPT" && node.parentNode.nodeName !== "OPTION" && node.parentNode.className !== "hltd_text" && (node.textContent.search(/[^ ]/) > -1)) { // if the parent node of the childnode isn't <style> or <body> we want to use it
+                if (node.parentNode.nodeName !== "STYLE" && node.parentNode.nodeName !== "SCRIPT" && node.parentNode.nodeName !== "OPTION" && node.parentNode.nodeName !== "TEXTAREA" && node.parentNode.className !== "hltd_text" && (node.textContent.search(/[^ ]/) > -1)) { // if the parent node of the childnode isn't <style> or <body> we want to use it
                     return NodeFilter.FILTER_ACCEPT // return FILTER_ACCEPT value which means select particular node
                 }
             }
@@ -55,13 +55,12 @@ function highlightText_2(stringArr, bkrColor = 'yellow', color = '#000', flags =
 
                     range.setStart(currentNode, array.index); // set the start-position of range on the current textnode on the position the occurrence is found
                     range.setEnd(currentNode, (array.index + array[0].length)) // set the end-position of range, on the current textnode, on the position where occurance is found plus the length of the string
-                    range.deleteContents();
-                    let span = document.createElement('font'); // create span element
+                    let span = document.createElement('span'); // create span element
                     span.textContent = array[0]; // fill the span with the matched word
                     span.style.cssText = `background-color: ${bkrColor[i]}; color: ${color[i]};border-radius: 3px; box-shadow: #c4c4c4 1px 1px 3px;`; // use background color
                     span.className = 'hltd_text';
                     span.id = id[i];
-                    range.insertNode(span); // insert node where our current range is
+                    range.surroundContents(span);
 
                 }
             }
