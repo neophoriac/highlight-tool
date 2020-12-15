@@ -2,7 +2,7 @@
     "manifest_version": 2,
     "name": "Highlight Magic",
     "description": "Enables user to highlight words",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "browser_action": {
         "default_title": "Highlight Magic",
         "default_popup": "popup.html"
