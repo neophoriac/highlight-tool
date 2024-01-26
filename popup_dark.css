@@ -9,7 +9,7 @@
 }
 
 /* dark #271729 #14181b */
-:root {
+/* :root {
     --body: #f7f8f9;
     --main: #fc036b;
     --main-soft: #ffc6c6;
@@ -68,9 +68,9 @@
 
 
     --main-font-family: Rubik;
-}
+} */
 
-/* :root {
+:root {
     --body: #14181b;
     --main: #fc036b;
     --main-soft: #ffc6c6;
@@ -128,7 +128,7 @@
 
 
     --main-font-family: Rubik;
-} */
+}
 
 
 @keyframes slidein {
@@ -300,7 +300,7 @@ body {
     width: fit-content;
     font-variation-settings: "wght" 410;
     font-size: 30px;
-    color: var(--input-place-color);
+    color: #666a73;
     z-index: 1;
 }
 
@@ -658,6 +658,7 @@ body {
 .url_restriction_container:focus-within>label {
     /* color: var(--label-color-focus); */
     background-color: var(--btn-secondary);
+    color: var(--btn-primary-text);
 }
 
 .url_restriction_container:focus-within>div {

@@ -1,90 +1,203 @@
-class QueryLine {
-    constructor(pattern, bkrColor, color, flags, onlyWords, root, id) {
-        this.pattern = pattern;
-        this.bkrColor = bkrColor;
-        this.color = color;
-        this.flags = flags;
-        this.onlyWords = onlyWords;
-        this.root = root;
-        this.id = id;
-    };
-};
+let indication = document.getElementById('saving');
 
-if (!localStorage.getItem('isRegex')) {
-    localStorage.setItem('isRegex', 'false');
-}
-
-if (!localStorage.getItem('wholeWords')) {
-    localStorage.setItem('wholeWords', 'true');
-}
-
-let queriesArr = {};
-let domain;
-
-function store(e) {
-
-    let indication = document.getElementById('saving')
-    indication.style.visibility = "visible";
-    let lists = document.querySelectorAll('[name^="list"]');
+function store(lists) {
+    let storedLists = [];
     lists.forEach(list => {
 
-        queriesArr[list.className] = {};
-        let queries = {};
+        let configurator = list.querySelector('.configurator');
 
-        let items = list.querySelectorAll('.item');
-        let patternArr = [];
-        let flagArr = [];
-        let bkrColorArr = [];
-        let colorArr = [];
-        let idArr = [];
+        indication.style.visibility = "visible";
 
-        items.forEach(item => {
-            let pattern
-            if (document.getElementById('regex').checked === false) {
-                pattern = item.querySelector('.textarea').value.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');  // -bobince & fregante : https://stackoverflow.com/questions/3561493/is-there-a-regexp-escape-function-in-javascript
-            } else {
-                pattern = item.querySelector('.textarea').value
-            }
-            let flag = item.querySelector('[class^="flag"]');
-            let bkrColor = item.querySelector('[name="bkgrColor"]').value;
-            let color = item.querySelector('[name="color"]').value;
-            let id = item.querySelector('.textarea').id;
-            if (flag.className === 'flag-on') { flag = 'gi' } else { flag = 'g' };
-            queries[pattern] = new QueryLine(pattern, bkrColor, color, flag, document.getElementById('completeWords').checked, document.body, id);
+        let key = list.id;
+        let items = configurator.querySelectorAll('.item');
+        let name = list.getAttribute('name');
 
-            patternArr.push(pattern);
-            flagArr.push(flag);
-            bkrColorArr.push(bkrColor);
-            colorArr.push(color);
-            idArr.push(id);
-        });
-
-        queriesArr[list.className]['queryInfo'] = [patternArr, flagArr, bkrColorArr, colorArr, idArr];
-        queriesArr[list.className]['queries'] = queries;
-
-    });
-    chrome.storage.local.set(queriesArr, function () {
-        indication.style.visibility = "hidden";
-    });
-};
-
-function saveSettings(){
-    let isRegex = document.getElementById('regex').checked;
-    let isWholeWords = document.getElementById('completeWords').checked;
-    let blacklist = document.getElementById('blacklist')
-    let blacklistItems = document.getElementById('blacklist').innerText.split('\n');
-
-    let settings = {regex: isRegex, wholeWords: isWholeWords, blacklist: blacklist.innerText, blacklistItems: blacklistItems}
-    chrome.storage.local.set({settings: settings});
+        let storedArr = storeList(key, items, name);
+        storedLists.push(storedArr);
+    })
+    return storedLists;
 }
 
-let lists = {
-    queriesArr,
-    getPattern: function () {
-        let arr = [];
-        Object.keys(this.queriesArr).forEach(key => {
-            arr.push(this.queriesArr[key].pattern);
-        });
-        return arr;
+function storeList(key, items, name) {
+    let itemArr = [];
+    let customSettings = getCustSettings(key)
+
+    items.forEach(item => {
+        let pattern = item.querySelector('.textarea').value;
+
+        if (pattern === "") {
+            return
+        };
+
+        let flag = item.querySelector('[data-toggle^="flag"]');
+        let bkrColor = item.querySelector('[name="bkgrColor"]').value;
+        let color = item.querySelector('[name="color"]').value;
+        let id = item.querySelector('.textarea').id;
+        flag = flag.dataset.toggle === 'flag-on' ? 'gi' : 'g';
+
+
+        let obj = {
+            p: pattern,
+            f: flag,
+            i: id
+        };
+
+        // random color mode is enabled
+        if (customSettings.cm) {
+            obj.c = color;
+            obj.bc = bkrColor
+        }
+
+        itemArr.push(obj);
+    });
+
+    let storagePacket = {};
+    let obj = { name: name, lists: itemArr, settings: customSettings };
+    storagePacket[key] = obj;
+    storagePacket["dm"] = new Date().toJSON();
+
+    chrome.storage.local.set(storagePacket, function (result) {
+        if (chrome.runtime.lastError) {
+            alertMessage.innerText = chrome.runtime.lastError.message;
+            alertMessage.parentElement.hidden = false;
+        }
+        indication.style.visibility = "hidden";
+    });
+
+    Object.assign(lists, storagePacket);
+    return itemArr;
+}
+
+function storeSettings() {
+    indication.style.visibility = "visible";
+    let isRegex = document.getElementById('regex').checked;
+    let isWholeWords = document.getElementById('completeWords').checked;
+
+    let blacklistItems = Array.from(document.getElementById('blacklist').children);
+    blacklistItems = blacklistItems.map(el => el.children[1].value);
+    blacklistItems = blacklistItems.filter(val => val !== "");
+
+    let whitelistItems = Array.from(document.getElementById('whitelist').children);
+    whitelistItems = whitelistItems.map(el => el.children[1].value);
+    whitelistItems = whitelistItems.filter(val => val !== "");
+
+    let settings = { regex: isRegex, wholeWords: isWholeWords, blacklistItems: blacklistItems, whitelistItems: whitelistItems };
+    chrome.storage.local.set({ settings: settings, dm: new Date().toJSON() }, function (result) {
+        if (chrome.runtime.lastError) {
+            alertMessage.innerText = chrome.runtime.lastError.message;
+            alertMessage.parentElement.hidden = false;
+        }
+        indication.style.visibility = "hidden";
+        chrome.runtime.sendMessage({ command: { newSettings: settings } });
+    });
+
+}
+
+function getCustSettings(id) {
+
+    const isEnabled = document.getElementById('toggle_custom').checked;
+    const isPaused = document.getElementById(`toggle_${id}`).checked;
+    const isSync = document.getElementById('sync_storage').checked;
+    const isRegex = document.getElementById('regexCust').checked;
+    const isWholeWords = document.getElementById('completeWordsCust').checked;
+    const isRandomMode = document.getElementById('settings_random_color').checked;
+    const isItalic = document.getElementById('italic_style').checked;
+    const isBold = document.getElementById('bold_style').checked;
+    const isIUnderline = document.getElementById('underline_style').checked;
+
+    let blacklistItems = Array.from(document.getElementById('blacklistCust').children);
+    blacklistItems = blacklistItems.map(el => el.children[1].value);
+    blacklistItems = blacklistItems.filter(val => val !== "");
+
+    let whitelistItems = Array.from(document.getElementById('whitelistCust').children);
+    whitelistItems = whitelistItems.map(el => el.children[1].value);
+    whitelistItems = whitelistItems.filter(val => val !== "");
+
+    let settings = {
+        t: isPaused,
+        e: isEnabled,
+        s: isSync,
+        regex: isRegex,
+        wholeWords: isWholeWords,
+        b: blacklistItems,
+        w: whitelistItems,
+        cm: isRandomMode,
+        is: isItalic,
+        bs: isBold,
+        us: isIUnderline
+    };
+
+    if (!isRandomMode) {
+        let bgColor = document.querySelector('[name="bg-option"]:checked').dataset.color;
+        let textColor = document.querySelector('[name="color-option"]:checked').dataset.color
+
+        settings.cb = bgColor
+        settings.ct = textColor
     }
-};
+    changeSync(id, isSync)
+
+    return settings;
+
+}
+
+function removeList(key) {
+    chrome.storage.local.remove(key, function (response) {
+        if (chrome.runtime.lastError) {
+            alertMessage.innerText = chrome.runtime.lastError.message;
+            alertMessage.parentElement.hidden = false;
+        }
+        storeOrder();
+        delete lists[key];
+    });
+
+}
+
+function storeOrder() {
+    indication.style.visibility = "visible";
+
+    let rows = Array.from(document.getElementsByClassName('row'));
+    listOrder = [];
+
+    for (i = 0; i < rows.length; i++) {
+        let row = rows[i];
+        let id = row.dataset.parent;
+        let name = row.querySelector('.row_conf_btn').innerText;
+
+        let obj = {
+            id: id,
+            name: name
+        }
+        listOrder.push(obj);
+    }
+
+    chrome.storage.local.set({ listOrder: listOrder, dm: new Date().toJSON() }, function (result) {
+        indication.style.visibility = "hidden";
+        chrome.runtime.sendMessage({ command: "updateMenu" })
+    });
+}
+
+function initListInStorage(id, name, lists = []) {
+    const randColor = getColor();
+    const packet = { dm: new Date().toJSON() }
+    const settings = { t: true, e: false, s: true, regex: false, wholeWords: true, b: [], w: [], cm: false, cb: randColor[0], ct: randColor[1], is: false, bs: false, us: false };
+    packet[id] = { name: name, lists: lists, settings: settings };
+    chrome.storage.local.set(packet, (result) => {
+        if (chrome.runtime.lastError) {
+            alertMessage.innerText = chrome.runtime.lastError.message;
+            alertMessage.parentElement.hidden = false;
+        }
+        lists = packet;
+        changeSync(id, true);
+        storeOrder();
+    });
+    return packet[id];
+}
+
+function createPrimeList(wordArray) {
+    let list = [];
+    wordArray.forEach(word => {
+        let item = {f: "gi", i: crypto.randomUUID(), p: word.trim() };
+        list.push(item);
+    });
+    return list;
+}

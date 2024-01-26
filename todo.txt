@@ -1,0 +1,4 @@
+Fix linux (Kubuntu) import/export file system api bug
+Count words
+Effectively inform users that global settings won't be enabled for lists with custom settings enabled
+dark mode

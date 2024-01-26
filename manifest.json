@@ -1,15 +1,16 @@
 {
-    "manifest_version": 2,
+    "update_url": "https://clients2.google.com/service/update2/crx",
+    "manifest_version": 3,
     "name": "Highlight Magic",
     "description": "Enables user to highlight words",
-    "version": "1.0.2",
-    "browser_action": {
-        "default_title": "Highlight Magic",
-        "default_popup": "popup.html"
+    "version": "1.1.2",
+    "action": {
+        "default_title": "Highlight Magic"
     },
     "permissions": [
         "tabs",
-        "storage"
+        "storage",
+		"contextMenus"
     ],
     "icons": {
         "16": "icons/16px.png",
@@ -21,14 +22,14 @@
             "matches": [
                 "<all_urls>"
             ],
+            "all_frames": true,
             "js": [
+				"quickfind.js",
                 "content.js"
             ]
         }
     ],
     "background": {
-        "scripts": [
-            "background.js"
-        ]
+        "service_worker": "background.js"
     }
 }
